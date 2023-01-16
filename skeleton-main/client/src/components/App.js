@@ -44,15 +44,18 @@ const App = () => {
 
   return (
     <>
-      <NavBar>
       <div>
-      <Router>
-        <HomePage path="/" handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />
-        <LobbyPage path="/Lobby" />
-        <NotFound default />
-      </Router>
+        <Router>
+          <HomePage
+            path="/"
+            handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            userId={userId}
+          />
+          <LobbyPage path="/Lobby" />
+          <NotFound default />
+        </Router>
       </div>
-      </NavBar>
     </>
   );
 };
