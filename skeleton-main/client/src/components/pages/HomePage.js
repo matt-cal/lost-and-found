@@ -2,12 +2,12 @@ import React from "react";
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
 
 import "../../utilities.css";
-import "./Skeleton.css";
+import "./HomePage.css";
 
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
 const GOOGLE_CLIENT_ID = "89445914111-u81dif2k5ba9g2bm0h5rvuotfo7f9tup.apps.googleusercontent.com";
 
-const Skeleton = ({ userId, handleLogin, handleLogout }) => {
+const HomePage = ({ userId, handleLogin, handleLogout }) => {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       {userId ? (
@@ -22,7 +22,7 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
       ) : (
         <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
       )}
-      <h1>Good luck on your project :)</h1>
+      <h1>Lost & Found</h1>
       <h2> What you need to change in this skeleton</h2>
       <ul>
         <li>
@@ -44,4 +44,4 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
   );
 };
 
-export default Skeleton;
+export default HomePage;
