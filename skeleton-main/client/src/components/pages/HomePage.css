@@ -1,1 +1,38 @@
-/* Fill me in :) */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap");
+
+.HomePage-container {
+}
+
+.HomePage-title {
+  padding: 40px;
+  height: 48px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+
+  border-bottom: dashed 2px red;
+}
+
+.HomePage-content {
+  margin: 8px 0px;
+  padding: 88px;
+  display: flex;
+  justify-content: center;
+
+  border: dashed 2px blue;
+}
+
+/* Sign In */
+.HomePage-signin-container {
+  width: 400px;
+  height: 450px;
+  gap: 80px;
+
+  border: dashed 2px black;
+}
+
+.HomePage-signin-text {
+  font-family: "Open Sans", sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+}
