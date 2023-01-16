@@ -1,1 +1,10 @@
 
+body{
+    margin: 0;
+    padding: 0;
+    height: auto;
+    max-width: 100%;
+    background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}

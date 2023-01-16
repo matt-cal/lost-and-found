@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import NotFound from "./pages/NotFound.js";
 import HomePage from "./pages/HomePage.js";
 import LobbyPage from "./pages/LobbyPage.js";
+import NavBar from "./modules/NavBar.js";
 
 import "../utilities.css";
 

@@ -1,20 +1,23 @@
 .NavBar-container {
-    padding: var(--s) var(--m);
-    background-color: var(--primary);
+    padding: 0;
+    background-color: rgba(251, 251, 250, 0.658);
   }
   
   .NavBar-title {
-    color: var(--white);
-    font-size: 20px;
+    color: #080447;
+    font-size: 40px;
+    padding-top: var(--m);
   }
   
   .NavBar-linkContainer {
     margin-left: var(--l);
   }
   
-  .NavBar-link,
+  .NavBar-link{
+    color: #080447;
+  }
   .NavBar-link:visited {
-    color: var(--white);
+    color: crimson;
     opacity: 0.6;
     text-decoration: none;
   }
@@ -33,16 +36,18 @@
   }
   .nav {
 	width: 100%;
-	float: left;
 	margin: 0 0 1em 0;
 	padding: 0;
-	background-color: #f2f2f2;
+	background-color: #533571;
 	border-bottom: 1px solid #ccc;  }
+  
   .nav ul {
+
 	list-style: none;
 	width: 800px;
 	margin: 0 auto;
 	padding: 0; }
+  
   .nav li {
 	float: left; }
   .nav li a {

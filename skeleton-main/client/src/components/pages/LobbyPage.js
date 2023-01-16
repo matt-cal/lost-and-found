@@ -12,7 +12,6 @@ const LobbyPage = () => {
                 <span>
                     Lost & Found
                 </span>
-            
             </div>
         </nav>
     );

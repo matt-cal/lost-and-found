@@ -18,7 +18,7 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 :root {
-  --primary: #396dff;
+  --primary: #533571;
   --primary--dim: #6987db;
   --darkgrey: #d4d4d4;
   --medgrey: #e0e0e0;
@@ -40,6 +40,11 @@ body {
 
 form {
   flex-grow: 1;
+}
+
+img{
+  max-width: 100%;
+  height: auto;
 }
 
 .u-flex {
@@ -88,3 +93,4 @@ form {
 .u-link:hover {
   color: var(--primary--dim);
 }
+
