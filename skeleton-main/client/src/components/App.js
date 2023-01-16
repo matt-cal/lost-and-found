@@ -46,6 +46,7 @@ const App = () => {
     <>
       <Router>
         <HomePage path="/" handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />
+        <LobbyPage path ="/Lobby" />
         <NotFound default />
       </Router>
     </>
