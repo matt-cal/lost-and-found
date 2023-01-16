@@ -21,7 +21,7 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
           >
             Logout
           </button>
-          <Link>Play</Link>
+          <Link to="/Lobby/">Play</Link>
         </div>
       ) : (
         <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
