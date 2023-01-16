@@ -1,0 +1,2 @@
+SESSION_SECRET = Lost and Found
+MONGO_SRV= "mongodb+srv://camila-zavala:<4vh2YaTKUVpEhav>@fireducks.odfl7vx.mongodb.net/?retryWrites=true&w=majority"
