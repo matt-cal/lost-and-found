@@ -15,16 +15,19 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
       <div className="HomePage-content">
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           {userId ? (
-            <div>
+            <div className="HomePage-logout-container">
+              <Link to="/Lobby/" className="HomePage-playButton">
+                Play
+              </Link>
               <button
                 onClick={() => {
                   googleLogout();
                   handleLogout();
                 }}
+                className="HomePage-logoutButton"
               >
                 Logout
               </button>
-              <Link to="/Lobby/">Play</Link>
             </div>
           ) : (
             <div className="HomePage-signin-container u-flexColumn u-flex-justifyCenter u-flex-alignCenter ">

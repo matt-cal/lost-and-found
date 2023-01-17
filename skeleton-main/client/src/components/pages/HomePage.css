@@ -1,12 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap");
 
 .HomePage-container {
+  background-color: var(--white);
+  font-family: "Open Sans", sans-serif;
 }
 
 .HomePage-title {
   padding: 40px;
   height: 48px;
-  font-family: "Open Sans", sans-serif;
   font-weight: bold;
   font-size: 40px;
 
@@ -16,6 +17,7 @@
 .HomePage-content {
   margin: 8px 0px;
   padding: 88px;
+  height: 100vh;
   display: flex;
   justify-content: center;
 
@@ -27,12 +29,46 @@
   width: 400px;
   height: 450px;
   gap: 80px;
+  background-color: var(--grey);
+  filter: drop-shadow(8px 8px 4px #a6a6a6);
 
   border: dashed 2px black;
 }
 
 .HomePage-signin-text {
-  font-family: "Open Sans", sans-serif;
   font-size: 32px;
   font-weight: 400;
+}
+
+/* Log Out */
+.HomePage-logout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.HomePage-playButton {
+  width: 400px;
+  height: 80px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  line-height: 80px;
+  font-weight: 700;
+  font-size: 32px;
+  background-color: rgb(73, 170, 255);
+  border-radius: 40px;
+  filter: drop-shadow(4px 8px 4px #b1b1b1);
+}
+
+.HomePage-logoutButton {
+  width: 72px;
+  color: white;
+  font-family: "Open Sans", sans-serif;
+  background-color: rgb(73, 170, 255);
+  border: none;
+  height: 32px;
+  border-radius: 16px;
+  filter: drop-shadow(2px 4px 4px #b1b1b1);
 }
