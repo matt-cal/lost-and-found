@@ -30,7 +30,7 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
               </button>
             </div>
           ) : (
-            <div className="HomePage-signin-container u-flexColumn u-flex-justifyCenter u-flex-alignCenter ">
+            <div className="HomePage-signin-container u-flexColumn u-flex-alignCenter ">
               <p className="HomePage-signin-text">Log In</p>
               <GoogleLogin
                 onSuccess={handleLogin}
