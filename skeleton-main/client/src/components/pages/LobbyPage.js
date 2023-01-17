@@ -8,11 +8,7 @@ import "./LobbyPage.css";
 const LobbyPage = () => {
     return (
         <nav>
-            <div>
-                <span>
-                    Lost & Found
-                </span>
-            </div>
+            Lost & Found
         </nav>
     );
 
