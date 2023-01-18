@@ -13,6 +13,7 @@ import "../utilities.css";
 import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
+import WaitingRoom from "./pages/WaitingRoom.js";
 
 /**
  * Define the "App" component
@@ -55,6 +56,7 @@ const App = () => {
             userId={userId}
           />
           <LobbyPage path="/lobby" />
+          <WaitingRoom path="/waitingroom"/>
           <Maps path="/Game" />
           <NotFound default />
         </Router>

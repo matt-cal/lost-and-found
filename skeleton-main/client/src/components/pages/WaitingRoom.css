@@ -1,0 +1,16 @@
+
+.WaitingRoom-container {
+    font-family: "Open Sans", sans-serif;
+    background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
+    background-size: contain;
+    height: 800px;
+    max-width: 100%;
+    background-repeat: no-repeat;
+}
+
+.side-Bar{
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    color: aqua;
+}
+

@@ -3,7 +3,7 @@
 .HomePage-container {
   font-family: "Open Sans", sans-serif;
   background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 
