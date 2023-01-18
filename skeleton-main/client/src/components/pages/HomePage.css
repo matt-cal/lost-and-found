@@ -21,6 +21,7 @@
   height: 100vh;
   display: flex;
   justify-content: center;
+  background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
 
   /* border: dashed 2px blue; */
 }
