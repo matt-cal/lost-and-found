@@ -54,7 +54,7 @@ const App = () => {
             handleLogout={handleLogout}
             userId={userId}
           />
-          <LobbyPage path="/Lobby" />
+          <LobbyPage path="/lobby" />
           <Maps path="/Game" />
           <NotFound default />
         </Router>

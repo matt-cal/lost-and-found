@@ -16,7 +16,7 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           {userId ? (
             <div className="HomePage-logout-container">
-              <Link to="/Lobby/" className="HomePage-playButton">
+              <Link to="/lobby/" className="HomePage-playButton">
                 Play
               </Link>
               <button
