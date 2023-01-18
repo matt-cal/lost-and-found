@@ -55,8 +55,8 @@ const App = () => {
             userId={userId}
           />
           <LobbyPage path="/Lobby" />
-          <NotFound default />
           <Maps path="/Game" />
+          <NotFound default />
         </Router>
       </div>
     </>

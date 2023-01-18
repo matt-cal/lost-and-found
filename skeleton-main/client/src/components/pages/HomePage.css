@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap");
 
 .HomePage-container {
-  background-color: rgba(245, 255, 241, 0.7);
   font-family: "Open Sans", sans-serif;
+  background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .HomePage-title {
@@ -12,18 +14,14 @@
   font-size: 40px;
   background-color: white;
   border-bottom: solid 1px rgb(136, 136, 136);
-  /* border-bottom: dashed 2px red; */
 }
 
 .HomePage-content {
-  margin: 8px 0px;
-  padding: 40px;
+  background-color: rgba(245, 255, 241, 0.7);
+  padding: 48px;
   height: 100vh;
   display: flex;
   justify-content: center;
-  background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
-
-  /* border: dashed 2px blue; */
 }
 
 /* Sign In */
