@@ -6,11 +6,42 @@
     height: 800px;
     max-width: 100%;
     background-repeat: no-repeat;
+    position: relative;
 }
 
-.side-Bar{
-    display: grid;
-    grid-template-columns: 2fr 2fr;
-    color: aqua;
+.left-Bar{
+  background-color: rgba(211, 211, 211, 0.623);
+  padding: 30px;
+  margin: 0px;
+  width: 220px;
+  height: 830px;
+  float:left; 
+}
+
+.right-Bar{
+  background-color: rgba(211, 211, 211, 0.623);
+  padding: 30px;
+  margin: 0px;
+  width: 220px;
+  height: 830px;
+  float: right;
+}
+
+.player-text{
+  padding: 18px;
+  height: 15px;
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: solid 1px rgb(136, 136, 136);
+  text-align: center;
+}
+
+.body-container{
+    text-align: center;
+    font-size: 20px;
+    padding: 18px;
+    height: 15px;
+    
+
 }
 
