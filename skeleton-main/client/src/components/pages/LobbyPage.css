@@ -8,6 +8,7 @@
   background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  font-family: "Open Sans", sans-serif;
 }
 
 .lobby-title {
@@ -15,45 +16,44 @@
   height: 38px;
   font-weight: bold;
   font-size: 40px;
-  background-color: #DDE5B6;
-  color: #6C584C;
+  background-color: #dde5b6;
+  color: #6c584c;
 }
 
 .Host-Button {
-    width: 300px;
-    height: 80px;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    line-height: 80px;
-    font-weight: 700;
-    font-size: 32px;
-    background-color: #6C584C;
-    border-radius: 40px;
-    filter: drop-shadow(4px 8px 4px #b1b1b1);
-    display: inline-block;
+  width: 300px;
+  height: 80px;
+  color: var(--offWhite);
+  text-align: center;
+  text-decoration: none;
+  line-height: 80px;
+  font-weight: 700;
+  font-size: 32px;
+  background-color: #6c584c;
+  border-radius: 40px;
+  filter: drop-shadow(4px 8px 4px #b1b1b1);
+  display: inline-block;
 }
 
-.Join-Button{
-    width: 300px;
-    height: 80px;
-    color: white;
-    text-decoration: none;
-    text-align: center;
-    line-height: 80px;
-    font-weight: 700;
-    font-size: 32px;
-    background-color: #6C584C;
-    border-radius: 40px;
-    filter: drop-shadow(4px 8px 4px #b1b1b1);
-    display: inline-block;
+.Join-Button {
+  width: 300px;
+  height: 80px;
+  color: var(--offWhite);
+  text-decoration: none;
+  text-align: center;
+  line-height: 80px;
+  font-weight: 700;
+  font-size: 32px;
+  background-color: #6c584c;
+  border-radius: 40px;
+  filter: drop-shadow(4px 8px 4px #b1b1b1);
+  display: inline-block;
 }
 
 .Host-Container {
-    padding-top: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-  }
-
+  padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
