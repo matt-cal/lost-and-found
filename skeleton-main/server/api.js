@@ -111,14 +111,15 @@ router.get("/activeUsers", (req, res) => {
 router.get("/getUsername", (req, res) => {
   User.findOne({ name: req.user.name }).then((user) => {
     console.log(`found user: ${user.username}`);
+    res.send({ username: user.username });
   });
-  res.send({});
 });
 
 router.post("/changeUsername", (req, res) => {
   User.findOne({ name: req.user.name }).then((user) => {
     user.username = req.body.username;
     user.save();
+    socketManager.getSocketFromUserID(req.user._id).emit("username", user.username);
   });
   res.send({ message: "updated username" });
 });

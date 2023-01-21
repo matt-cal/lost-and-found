@@ -1,13 +1,24 @@
 import { Link } from "@reach/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { get, post } from "../../utilities.js";
 import "../../utilities.css";
 import "./LobbyPage.css";
+import { socket } from "../../client-socket.js";
 
 const LobbyPage = (props) => {
   const getUsername = () => {
-    get("/api/getUsername");
+    get("/api/getUsername").then((res) => {
+      return res.username;
+    });
   };
+
+  const [username, setUsername] = useState("");
+
+  socket.on("username", (data) => setUsername(data));
+
+  useEffect(() => {
+    get("/api/getUsername").then((data) => setUsername(data.username));
+  }, []);
 
   // message stores input field value
   const [message, setMessage] = useState("");
@@ -62,6 +73,7 @@ const LobbyPage = (props) => {
             </Link>
           </button>
           <div className="LobbyPage-username-container">
+            <div>Username: {username}</div>
             <input
               type="text"
               id="message"
