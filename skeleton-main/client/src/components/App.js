@@ -5,8 +5,8 @@ import jwt_decode from "jwt-decode";
 import NotFound from "./pages/NotFound.js";
 import HomePage from "./pages/HomePage.js";
 import LobbyPage from "./pages/LobbyPage.js";
-import Maps from "./pages/GamePage/Maps.js";
 import NavBar from "./modules/NavBar.js";
+import Game from "./pages/GamePage/Game.js";
 
 import "../utilities.css";
 
@@ -55,9 +55,9 @@ const App = () => {
             handleLogout={handleLogout}
             userId={userId}
           />
-          <LobbyPage path="/lobby" />
-          <WaitingRoom path="/waitingroom"/>
-          <Maps path="/Game" />
+          <LobbyPage path="/lobby" userId={userId} />
+          <WaitingRoom path="/waitingroom" userId={userId} />
+          <Game path="/Game" userId={userId} />
           <NotFound default />
         </Router>
       </div>
