@@ -7,7 +7,7 @@ const allLobbies = {};
 const findAndAddToLobby = (user, key) => {
   for (const hostID in allLobbies) {
     if (allLobbies[hostID].lobbyKey === key) {
-      allLobbies[hostID].player2 = { id: user._id, userName: user.name };
+      allLobbies[hostID].player2 = { id: user._id, userName: user.name, isHost: false };
       console.log("ANSWERRRRR", allLobbies[hostID]);
     }
   }
@@ -21,8 +21,8 @@ const createLobby = (user) => {
   const lobbyKey = generateLobbyKey();
   const lobby = {
     lobbyKey: lobbyKey,
-    player1: { id: user._id, userName: user.name },
-    player2: {},
+    player1: { id: user._id, userName: user.name, isHost: true },
+    player2: { isHost: false },
     hasGameStarted: false,
   };
   allLobbies[user._id] = lobby;
