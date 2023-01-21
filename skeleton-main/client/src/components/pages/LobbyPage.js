@@ -1,10 +1,25 @@
 import { Link } from "@reach/router";
-import React from "react";
+import React, { useState } from "react";
 import { get, post } from "../../utilities.js";
 import "../../utilities.css";
 import "./LobbyPage.css";
 
 const LobbyPage = (props) => {
+  const getUsername = () => {
+    get("/api/getUsername");
+  };
+
+  const [message, setMessage] = useState("");
+
+  const handleChange = (event) => {
+    setMessage(event.target.value);
+  };
+
+  const changeUsername = () => {
+    // "message" stores input field value
+    console.log(message);
+  };
+
   return (
     <>
       <nav className="main-content">
@@ -43,6 +58,17 @@ const LobbyPage = (props) => {
               Join
             </Link>
           </button>
+          <div className="LobbyPage-username-container">
+            <input
+              type="text"
+              id="message"
+              name="message"
+              onChange={handleChange}
+              value={message}
+            />
+            <button onClick={changeUsername}>Change Username</button>
+            <button onClick={getUsername}>Get Username</button>
+          </div>
         </div>
       </nav>
     </>

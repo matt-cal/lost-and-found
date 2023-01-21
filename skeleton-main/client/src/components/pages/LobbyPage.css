@@ -57,3 +57,9 @@
   align-items: center;
   gap: 32px;
 }
+
+.LobbyPage-username-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
