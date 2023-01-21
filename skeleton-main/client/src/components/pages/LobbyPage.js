@@ -9,6 +9,7 @@ const LobbyPage = (props) => {
     get("/api/getUsername");
   };
 
+  // message stores input field value
   const [message, setMessage] = useState("");
 
   const handleChange = (event) => {
@@ -16,8 +17,10 @@ const LobbyPage = (props) => {
   };
 
   const changeUsername = () => {
-    // "message" stores input field value
-    console.log(message);
+    let body = { username: message };
+    post("/api/changeUsername", body).then((res) => {
+      console.log(res.message);
+    });
   };
 
   return (

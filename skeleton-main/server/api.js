@@ -116,11 +116,11 @@ router.get("/getUsername", (req, res) => {
 });
 
 router.post("/changeUsername", (req, res) => {
-  // User.findOne({ name: req.body.name }).then((user) => {
-  //   user.username = req.body.username;
-  //   user.save();
-  // });
-  // res.send({ message: "updated username" });
+  User.findOne({ name: req.user.name }).then((user) => {
+    user.username = req.body.username;
+    user.save();
+  });
+  res.send({ message: "updated username" });
 });
 
 // anything else falls to this "not found" case
