@@ -16,9 +16,25 @@ const mapCenter = {
 };
 
 const markerCoordinates = [
-  { label: "Boston", position: { lat: 42.345573, lng: -71.098326 } },
-  { label: "NewYorkCity", position: { lat: 40.75497751666591, lng: -73.98997420018596 } },
-  { label: "LosAngeles", position: { lat: 34.01820940007115, lng: -118.2999255824083 } },
+  {
+    label: "Boston",
+    position: { lat: 42.345573, lng: -71.098326 },
+    startPositions: [
+      { lat: 42.345573, lng: -71.098326 }, // Fenway area
+      { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common
+      { lat: 42.360126338885586, lng: -71.05587522572742 }, // Quincy Market
+    ],
+  },
+  {
+    label: "NewYorkCity",
+    position: { lat: 40.75497751666591, lng: -73.98997420018596 },
+    startPositions: [{ lat: 40.75497751666591, lng: -73.98997420018596 }],
+  },
+  {
+    label: "LosAngeles",
+    position: { lat: 34.01820940007115, lng: -118.2999255824083 },
+    startPositions: [{ lat: 34.01820940007115, lng: -118.2999255824083 }],
+  },
 ];
 
 function Maps() {
@@ -36,6 +52,19 @@ function Maps() {
 
   const getPanorama = () => {
     return panorama;
+  };
+
+  const getRandomInt = (min, max) => {
+    // The maximum is exclusive and the minimum is inclusive
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+  };
+
+  const getStartPosition = (location) => {
+    // return random start position of location
+    let ix = getRandomInt(0, location.startPositions.length);
+    return location.startPositions[ix];
   };
 
   return isLoaded ? (
@@ -108,7 +137,7 @@ function Maps() {
                 const marker = markers[location.label];
                 marker.setVisible(false);
                 panorama.setVisible(true);
-                panorama.setPosition(location.position);
+                panorama.setPosition(getStartPosition(location));
                 setInsidePano(true);
               }}
             />
