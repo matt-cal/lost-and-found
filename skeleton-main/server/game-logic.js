@@ -25,7 +25,7 @@ const createLobby = (user, lobbyKey) => {
   };
   console.log("Lobby ${lobbyKey} has been created");
   // Adding Host to Game
-  lobby.players[user._id] = { userName: user.name, isHost: true };
+  lobby.players[user._id] = { userName: user.username, isHost: true };
   console.log("Player1 was added to Lobby ${lobbyKey} as Host");
   // Add Lobby to allLobbies queue
   allLobbies[lobbyKey] = lobby;
@@ -39,7 +39,7 @@ const joinLobby = (user, key) => {
     hostID = id;
   }
   // Adds Player2 to Lobby
-  allLobbies[key].players[user._id] = { userName: user.name, isHost: false };
+  allLobbies[key].players[user._id] = { userName: user.username, isHost: false };
   console.log("Player2 was added to Lobby ${key} as host");
   return hostID;
 };
@@ -63,7 +63,20 @@ const getOtherPlayerName = (user, key) => {
   }
   return "Waiting for Player2...";
 };
-
+const deleteLobby = (user, key) => {
+  let player2Id;
+  const lobby = allLobbies[key];
+  console.log("game-logic: deleteLobby", lobby);
+  for (const playerID in lobby.players) {
+    if (playerID !== user._id) {
+      player2Id = playerID;
+    }
+  }
+  console.log("game-logic: allLobbies: before", allLobbies);
+  delete allLobbies[key];
+  console.log("game-logic: allLobbies: after", allLobbies);
+  return player2Id;
+};
 /*------------------ End of Lobby System-------------------  */
 
 /* GameState */
@@ -131,4 +144,5 @@ module.exports = {
   getHostStatus,
   getUserName,
   getOtherPlayerName,
+  deleteLobby,
 };

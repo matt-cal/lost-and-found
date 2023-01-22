@@ -1,5 +1,6 @@
 let io;
 
+const socket = require("socket.io-client/lib/socket");
 const gameLogic = require("./game-logic");
 
 const userToSocketMap = {}; // maps user ID to socket object
@@ -53,6 +54,11 @@ const getOtherPlayerName = (user, key) => {
   return gameLogic.getOtherPlayerName(user, key);
 };
 
+const deleteLobby = (user, key) => {
+  const player2Id = gameLogic.deleteLobby(user, key);
+  const player2Socket = getSocketFromUserID(player2Id);
+  player2Socket.emit("displayHostLeft", "HOST LEFT");
+};
 /*------------------------ End of Lobby System----------------------*/
 
 /** Send game state to client */
@@ -130,5 +136,6 @@ module.exports = {
   getHostStatus: getHostStatus,
   getUserName: getUserName,
   getOtherPlayerName: getOtherPlayerName,
+  deleteLobby: deleteLobby,
   getIo: () => io,
 };

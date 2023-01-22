@@ -21,6 +21,7 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+const socket = require("socket.io-client/lib/socket");
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
 router.get("/whoami", (req, res) => {
@@ -96,6 +97,12 @@ router.post("/joinLobby", (req, res) => {
     socketManager.joinLobby(req.user, req.body.enteredKey);
   }
   res.send({});
+});
+
+router.post("/deleteLobby", (req, res) => {
+  if (req.user) {
+    socketManager.deleteLobby(req.user, req.body.key);
+  }
 });
 /*----------------------  END OF LOBBY SYSTEM  --------------------------*/
 

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./WaitingRoom.css";
 import { get, post } from "../../utilities.js";
 import { socket } from "../../client-socket.js";
+import { Link } from "@reach/router";
 
 const WaitingRoom = (props) => {
   const [player1, setPlayer1] = useState({ name: "" });
   const [player2, setPlayer2] = useState({ name: "" });
   const [gameKey, setGameKey] = useState({ key: "XXXXXX" });
   const [isHost, setIsHost] = useState("DefaultValue");
+  const [didHostLeave, setDidHostLeave] = useState(false);
   // IsPlayer2Here is defined as a state so it could be used as a Dependency in useEffect,
   // allowing the Host to update info once Player2 joins.
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
-  let [startClickable, setIsButtonAble] = useState(false);
-
   // Gets Lobby Key
   useEffect(() => {
     socket.on("getKey", (key) => {
@@ -72,44 +72,58 @@ const WaitingRoom = (props) => {
         socket.on("isPlayer2Here", (response) => {
           setIsPlayer2Here(true);
         });
+      } else {
+        console.log("Player2s socket turned on");
+        socket.on("displayHostLeft", (response) => {
+          console.log("Updating didHostLeave");
+          setDidHostLeave(true);
+        });
       }
     }
   }, [isHost]);
 
-  const RenderButton = (setIsPlayer2Here) => {
-    if(setIsPlayer2Here){
-      return (
-        <span> 
-        <button className="start-button">
-        <div className="start-text">
-          Start
-        </div>
-        </button>
-      </span>);
+  const handleLeaveLobby = () => {
+    if (isHost) {
+      post("/api/deleteLobby", gameKey);
+    } else {
+      post("/api/deletePlayer2", gameKey);
     }
   };
 
-
-
-  return (
-  <div className="WaitingRoom-container">
+  return !didHostLeave ? (
+    <div className="WaitingRoom-container">
       <span className="left-Bar">
+        <button onClick={handleLeaveLobby}>
+          <Link to="/lobby"> Quit... </Link>
+        </button>
+
         <div className="player-text">Player 1</div>
         <div className="body-container">Name: {player1.name}</div>
-        <div className="body-container">Ready:</div>
         <div className="body-container">Satistics</div>
         <div className="body-container">Key: {gameKey.key}</div>
       </span>
-      <span>{RenderButton}</span>
+      {isPlayer2Here ? (
+        <span>
+          <button className="start-button">
+            <div className="start-text">Start</div>
+          </button>
+        </span>
+      ) : (
+        <span></span>
+      )}
       <span className="right-Bar">
         <div className="player-text">Player 2</div>
-        <div className="body-container">Name:{player2.name}</div>
-        <div className="body-container">
-          <button>Ready</button>
-        </div>
+        <div className="body-container">Name: {player2.name}</div>
         <div className="body-container">Statistics</div>
       </span>
     </div>
+  ) : (
+    <>
+      <div id="Host-Left-Screen">
+        <h1> The Host has Left the Game </h1>
+        <Link to="/lobby"> Leave Game </Link>
+      </div>
+    </>
   );
 };
 
