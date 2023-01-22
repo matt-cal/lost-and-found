@@ -50,7 +50,6 @@ export function get(endpoint, params = {}) {
 // Helper code to make a post request. Default parameter of empty JSON Object for params.
 // Returns a Promise to a JSON Object.
 export function post(endpoint, params = {}) {
-  console.log("in the utilities post function", endpoint, params);
   return fetch(endpoint, {
     method: "post",
     headers: { "Content-type": "application/json" },

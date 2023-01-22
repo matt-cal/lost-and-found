@@ -45,13 +45,7 @@ router.get("/user", (req, res) => {
   });
 });
 
-// |------------------------------|
-// | write your API methods below!|
-// |------------------------------|
-
 router.post("/spawn", (req, res) => {
-  console.log("-----------------------------------");
-  console.log("In router.post(/spawn...");
   if (req.user) {
     console.log("req.user equaled true in router.post(/spawn...");
     socketManager.addUserToGame(req.user);
@@ -66,16 +60,34 @@ router.post("/despawn", (req, res) => {
   res.send({});
 });
 
+// |------------------------------|
+// | write your API methods below!|
+// |------------------------------|
+
+/*----------------- LOBBY SYSTEM  ------------------------*/
+
 router.post("/createLobby", (req, res) => {
   if (req.user) {
     socketManager.createLobby(req.user);
   }
   res.send({});
 });
-
-router.get("/getKey", (req, res) => {
+router.post("/getUserName", (req, res) => {
   if (req.user) {
-    res.send({ key: socketManager.getKey(req.user) });
+    res.send({ userName: socketManager.getUserName(req.user, req.body.key) });
+  }
+});
+
+router.post("/getOtherPlayerName", (req, res) => {
+  if (req.user) {
+    res.send({ userName: socketManager.getOtherPlayerName(req.user, req.body.key) });
+  }
+});
+
+router.post("/getHostStatus", (req, res) => {
+  if (req.user) {
+    console.log("REQQQQ", req.body.key);
+    res.send({ isHost: socketManager.getHostStatus(req.user, req.body.key), user: req.user });
   }
 });
 
@@ -85,24 +97,7 @@ router.post("/joinLobby", (req, res) => {
   }
   res.send({});
 });
-
-router.get("/checkFullLobby", (req, res) => {
-  if (req.user) {
-    res.send({ isFull: socketManager.checkFullLobby(req.user) });
-  }
-});
-
-router.get("/getPlayer1Info", (req, res) => {
-  if (req.user) {
-    res.send({ userInfo: socketManager.getPlayer1Info(req.user) });
-  }
-});
-
-router.get("/getPlayer2Info", (req, res) => {
-  if (req.user) {
-    res.send({ userInfo: socketManager.getPlayer2Info(req.user) });
-  }
-});
+/*----------------------  END OF LOBBY SYSTEM  --------------------------*/
 
 router.get("/activeUsers", (req, res) => {
   res.send({ activeUsers: socketManager.getAllConnectedUsers() });

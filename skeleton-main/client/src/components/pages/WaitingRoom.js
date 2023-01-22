@@ -1,28 +1,79 @@
 import React, { useEffect, useState } from "react";
 import "./WaitingRoom.css";
 import { get, post } from "../../utilities.js";
+import { socket } from "../../client-socket.js";
 
 const WaitingRoom = (props) => {
-  console.log("Hereeeee");
-  const [player1, setPlayer1] = useState({ name: "default-name" });
-  const [player2, setPlayer2] = useState({ name: "default-name" });
-  const [gameKey, setGameKey] = useState({ key: "random-key" });
+  const [player1, setPlayer1] = useState({ name: "" });
+  const [player2, setPlayer2] = useState({ name: "" });
+  const [gameKey, setGameKey] = useState({ key: "XXXXXX" });
+  const [isHost, setIsHost] = useState("DefaultValue");
+  // IsPlayer2Here is defined as a state so it could be used as a Dependency in useEffect,
+  // allowing the Host to update info once Player2 joins.
+  const [isPlayer2Here, setIsPlayer2Here] = useState(false);
 
+  // Gets Lobby Key
   useEffect(() => {
-    get("/api/getPlayer1Info").then((data) => {
-      console.log(data);
-      setPlayer1({ name: data.userInfo });
-      console.log("player1.name", player1.name);
+    socket.on("getKey", (key) => {
+      setGameKey({ key: key });
     });
   }, []);
 
+  // Gets Host Status
   useEffect(() => {
-    get("/api/getKey").then((data) => {
-      console.log("in get lobby get requet", data);
-      setGameKey({ key: data.key });
-      console.log("lobbystate", gameKey);
-    });
-  }, []);
+    if (gameKey.key !== "XXXXXX") {
+      //Ensures this useEffect doesn't happen on initial load
+      post("/api/getHostStatus", gameKey).then((data) => {
+        if (data.isHost) {
+          setIsHost(true);
+        } else {
+          setIsHost(false);
+        }
+      });
+    }
+  }, [gameKey, isPlayer2Here]);
+
+  // Gets Username of User and sets their role (either Player1 or Player2)
+  useEffect(() => {
+    if (isHost !== "DefaultValue") {
+      //Ensures this useEffect doesn't happen on initial load
+      post("/api/getUserName", gameKey).then((data) => {
+        if (isHost) {
+          console.log("Setting Player1 to Host..");
+          setPlayer1({ name: data.userName });
+        } else {
+          setPlayer2({ name: data.userName });
+        }
+      });
+    }
+  }, [isHost, isPlayer2Here]);
+
+  // Gets Username of the other Player and sets their role (either Player1 or Player2)
+  useEffect(() => {
+    if (isHost !== "DefaultValue") {
+      //Ensures this useEffect doesn't happen on initial load
+      post("/api/getOtherPlayerName", gameKey).then((data) => {
+        if (isHost) {
+          console.log("Setting Player2 to Joinee..");
+          setPlayer2({ name: data.userName });
+        } else {
+          setPlayer1({ name: data.userName });
+        }
+      });
+    }
+  }, [isHost, isPlayer2Here]);
+
+  // If Host, creates listener socket to know when Player2 joins
+  useEffect(() => {
+    if (isHost !== "DefaultValue") {
+      //Ensures this useEffect doesn't happen on initial load
+      if (isHost) {
+        socket.on("isPlayer2Here", (response) => {
+          setIsPlayer2Here(true);
+        });
+      }
+    }
+  }, [isHost]);
 
   return (
     <div className="WaitingRoom-container">

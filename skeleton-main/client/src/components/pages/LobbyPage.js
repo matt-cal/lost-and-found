@@ -10,20 +10,10 @@ const LobbyPage = (props) => {
       <nav className="main-content">
         <div className="lobby-title">Lost & Found</div>
         <div className="Host-Container u-flex-alignCenter u-flexColumn">
-          {/*
-          <button
-            onClick={() => {
-              console.log("In onClick in Host Game Button");
-              /*post("/api/spawn", { userid: props.userId });
-              post("/api/createLobby", { userid: props.userId });
-            }}
-          ></button>
-          */}
           <button
             className="Host-Button"
             onClick={() => {
               console.log("In onClick in Host Game Button");
-              /*post("/api/spawn", { userid: props.userId });*/
               post("/api/createLobby", { userid: props.userId });
             }}
           >

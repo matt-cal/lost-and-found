@@ -10,29 +10,50 @@ const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
-/* Create a Lobby with the host User inside */
+/*------------------------ Lobby System----------------------*/
+
+const startRunningLobby = (user, key) => {
+  // Mechanism for immediately getting the key after creating lobby
+  const hostSocket = userToSocketMap[user._id];
+  hostSocket.emit("getKey", key);
+
+  /*
+  setInterval(() => {
+    isLobbyFull(hostSocket, user);
+  }, 1000 / 60); */
+};
+
 const createLobby = (user) => {
-  return gameLogic.createLobby(user);
-};
-const getKey = (user) => {
-  return gameLogic.getKey(user);
-};
-
-const getPlayer1Info = (user) => {
-  return gameLogic.getPlayer1Info(user);
-};
-
-const getPlayer2Info = (user) => {
-  return gameLogic.getPlayer2Info(user);
+  const lobbyKey = gameLogic.generateLobbyKey();
+  startRunningLobby(user, lobbyKey);
+  return gameLogic.createLobby(user, lobbyKey);
 };
 
 const joinLobby = (user, key) => {
-  gameLogic.joinLobby(user, key);
+  // Gives key to Player2, allowing Player2 screen to update and have all necessary info
+  const joineeSocket = userToSocketMap[user._id];
+  joineeSocket.emit("getKey", key);
+
+  const hostID = gameLogic.joinLobby(user, key); //Inserts Player2 to Lobby
+
+  // Lets Player1 know Player2 is in lobby, allowing Player1 to update info about Player2
+  const hostSocket = userToSocketMap[hostID];
+  hostSocket.emit("isPlayer2Here", "I AM HERE");
 };
 
-const checkFullLobby = (user) => {
-  gameLogic.checkFullLobby(user);
+const getHostStatus = (user, key) => {
+  return gameLogic.getHostStatus(user, key);
 };
+
+const getUserName = (user, key) => {
+  return gameLogic.getUserName(user, key);
+};
+
+const getOtherPlayerName = (user, key) => {
+  return gameLogic.getOtherPlayerName(user, key);
+};
+
+/*------------------------ End of Lobby System----------------------*/
 
 /** Send game state to client */
 const sendGameState = () => {
@@ -105,10 +126,9 @@ module.exports = {
   addUserToGame: addUserToGame,
   removeUserFromGame: removeUserFromGame,
   createLobby: createLobby,
-  getPlayer1Info: getPlayer1Info,
-  getPlayer2Info: getPlayer2Info,
-  getKey: getKey,
   joinLobby: joinLobby,
-  checkFullLobby: checkFullLobby,
+  getHostStatus: getHostStatus,
+  getUserName: getUserName,
+  getOtherPlayerName: getOtherPlayerName,
   getIo: () => io,
 };

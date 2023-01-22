@@ -3,56 +3,67 @@ let time_setting;
 
 /*------------------ Lobby System-------------------  */
 const allLobbies = {};
-
-const findAndAddToLobby = (user, key) => {
-  for (const hostID in allLobbies) {
-    if (allLobbies[hostID].lobbyKey === key) {
-      allLobbies[hostID].player2 = { id: user._id, userName: user.name, isHost: false };
-      console.log("ANSWERRRRR", allLobbies[hostID]);
-    }
-  }
-};
+const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const LOBBYKEYLENGTH = 6;
 
 const generateLobbyKey = () => {
-  return "JSYFOWN";
+  let result = "";
+  const charactersLength = CHARACTERS.length;
+  for (let i = 0; i < LOBBYKEYLENGTH; i++) {
+    result += CHARACTERS.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  console.log("Randomly Generated LobbyKey", result);
+  return result;
 };
 
-const createLobby = (user) => {
-  const lobbyKey = generateLobbyKey();
+const createLobby = (user, lobbyKey) => {
+  // Initializing Lobby
   const lobby = {
     lobbyKey: lobbyKey,
-    player1: { id: user._id, userName: user.name, isHost: true },
-    player2: { isHost: false },
+    players: {},
     hasGameStarted: false,
   };
-  allLobbies[user._id] = lobby;
-  console.log(allLobbies);
-};
-const getKey = (user) => {
-  const lobby = allLobbies[user._id];
-  return lobby.lobbyKey;
-};
-
-const getPlayer1Info = (user) => {
-  const lobby = allLobbies[user._id];
-  return lobby.player1.userName;
-};
-
-const getPlayer2Info = (user) => {
-  const lobby = allLobbies[user._id];
-  return lobby.player2.userName;
+  console.log("Lobby ${lobbyKey} has been created");
+  // Adding Host to Game
+  lobby.players[user._id] = { userName: user.name, isHost: true };
+  console.log("Player1 was added to Lobby ${lobbyKey} as Host");
+  // Add Lobby to allLobbies queue
+  allLobbies[lobbyKey] = lobby;
+  return lobby;
 };
 
 const joinLobby = (user, key) => {
-  findAndAddToLobby(user, key);
+  // Gets HostID (HostID is the only ID in the lobby at this point)
+  let hostID;
+  for (const id in allLobbies[key].players) {
+    hostID = id;
+  }
+  // Adds Player2 to Lobby
+  allLobbies[key].players[user._id] = { userName: user.name, isHost: false };
+  console.log("Player2 was added to Lobby ${key} as host");
+  return hostID;
 };
 
-const checkFullLobby = (user) => {
-  if (allLobbies[user._id].player2 === {}) {
-    return false;
-  }
-  return true;
+const getHostStatus = (user, key) => {
+  const lobby = allLobbies[key];
+  return lobby.players[user._id].isHost;
 };
+
+const getUserName = (user, key) => {
+  const lobby = allLobbies[key];
+  return lobby.players[user._id].userName;
+};
+
+const getOtherPlayerName = (user, key) => {
+  const lobby = allLobbies[key];
+  for (const playerID in lobby.players) {
+    if (playerID !== user._id) {
+      return lobby.players[playerID].userName;
+    }
+  }
+  return "Waiting for Player2...";
+};
+
 /*------------------ End of Lobby System-------------------  */
 
 /* GameState */
@@ -115,9 +126,9 @@ module.exports = {
   updateGameState,
   resetWinState,
   createLobby,
-  getPlayer1Info,
-  getKey,
   joinLobby,
-  getPlayer2Info,
-  checkFullLobby,
+  generateLobbyKey,
+  getHostStatus,
+  getUserName,
+  getOtherPlayerName,
 };
