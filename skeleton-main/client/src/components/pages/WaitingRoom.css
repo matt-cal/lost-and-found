@@ -41,7 +41,26 @@
     font-size: 20px;
     padding: 18px;
     height: 15px;
-    
+}
 
+.start-text{
+  font: bold;
+  font-size: 50px;
+  text-align: center;
+}
+
+.start-button {
+  background-color: rgba(255, 228, 196, 0.551);
+  padding: 0px;
+  margin: 0;
+  width: 220px; 
+  height: 70px;
+  position: absolute; 
+  top: 50%; 
+  left: 50%;
+  margin-top: -50px; 
+  margin-left: -100px;
+  filter: drop-shadow(4px 8px 4px #b1b1b1);
+  text-decoration: none;
 }
 

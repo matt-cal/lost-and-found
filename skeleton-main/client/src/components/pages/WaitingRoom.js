@@ -11,6 +11,7 @@ const WaitingRoom = (props) => {
   // IsPlayer2Here is defined as a state so it could be used as a Dependency in useEffect,
   // allowing the Host to update info once Player2 joins.
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
+  let [startClickable, setIsButtonAble] = useState(false);
 
   // Gets Lobby Key
   useEffect(() => {
@@ -75,8 +76,23 @@ const WaitingRoom = (props) => {
     }
   }, [isHost]);
 
+  const RenderButton = (setIsPlayer2Here) => {
+    if(setIsPlayer2Here){
+      return (
+        <span> 
+        <button className="start-button">
+        <div className="start-text">
+          Start
+        </div>
+        </button>
+      </span>);
+    }
+  };
+
+
+
   return (
-    <div className="WaitingRoom-container">
+  <div className="WaitingRoom-container">
       <span className="left-Bar">
         <div className="player-text">Player 1</div>
         <div className="body-container">Name: {player1.name}</div>
@@ -84,6 +100,7 @@ const WaitingRoom = (props) => {
         <div className="body-container">Satistics</div>
         <div className="body-container">Key: {gameKey.key}</div>
       </span>
+      <span>{RenderButton}</span>
       <span className="right-Bar">
         <div className="player-text">Player 2</div>
         <div className="body-container">Name:{player2.name}</div>
