@@ -103,6 +103,22 @@ router.get("/activeUsers", (req, res) => {
   res.send({ activeUsers: socketManager.getAllConnectedUsers() });
 });
 
+router.get("/getUsername", (req, res) => {
+  User.findOne({ name: req.user.name }).then((user) => {
+    console.log(`found user: ${user.username}`);
+    res.send({ username: user.username });
+  });
+});
+
+router.post("/changeUsername", (req, res) => {
+  User.findOne({ name: req.user.name }).then((user) => {
+    user.username = req.body.username;
+    user.save();
+    socketManager.getSocketFromUserID(req.user._id).emit("username", user.username);
+  });
+  res.send({ message: "updated username" });
+});
+
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);

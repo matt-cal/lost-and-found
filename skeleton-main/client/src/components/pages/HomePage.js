@@ -35,7 +35,7 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
               <GoogleLogin
                 onSuccess={handleLogin}
                 onError={(err) => console.log(err)}
-                theme="filled_blue"
+                theme="outline"
                 shape="pill"
               />
             </div>

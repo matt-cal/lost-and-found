@@ -8,16 +8,16 @@
 }
 
 .HomePage-title {
-  padding: 40px;
-  height: 48px;
+  padding: 30px;
+  height: 38px;
   font-weight: bold;
   font-size: 40px;
-  background-color: white;
-  border-bottom: solid 1px rgb(136, 136, 136);
+  background-color: var(--lightGreen);
+  color: var(--darkBrown);
 }
 
 .HomePage-content {
-  background-color: rgba(245, 255, 241, 0.7);
+  background-color: rgba(245, 255, 241, 0.65);
   padding: 48px;
   height: 100vh;
   display: flex;
@@ -29,7 +29,8 @@
   width: 400px;
   height: 350px;
   gap: 40px;
-  background-color: rgb(255, 255, 255);
+  color: var(--offWhite);
+  background-color: var(--darkBrown);
   filter: drop-shadow(8px 8px 4px #a6a6a6);
   border-radius: 40px;
   border: solid 1px rgb(136, 136, 136);
@@ -53,22 +54,22 @@
 .HomePage-playButton {
   width: 400px;
   height: 80px;
-  color: white;
+  color: var(--offWhite);
   text-decoration: none;
   text-align: center;
   line-height: 80px;
   font-weight: 700;
   font-size: 32px;
-  background-color: rgb(73, 170, 255);
+  background-color: var(--darkBrown);
   border-radius: 40px;
   filter: drop-shadow(4px 8px 4px #b1b1b1);
 }
 
 .HomePage-logoutButton {
   width: 72px;
-  color: white;
+  color: var(--offWhite);
   font-family: "Open Sans", sans-serif;
-  background-color: rgb(73, 170, 255);
+  background-color: var(--darkBrown);
   border: none;
   height: 32px;
   border-radius: 16px;
