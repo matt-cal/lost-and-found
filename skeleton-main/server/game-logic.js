@@ -143,7 +143,8 @@ const updatePlayerPosition = (id, newCoords) => {
   if (gameState.players[id] == undefined) {
     return;
   }
-  gameState.players.position = newCoords;
+  console.log(`New Location: ${newCoords.lat}, ${newCoords.lng}`);
+  gameState.players[id].position = newCoords;
 };
 
 const checkWin = () => {

@@ -105,6 +105,13 @@ function Maps() {
           onPositionChanged={() => {
             if (insidePano) {
               console.log(panorama.location.latLng.lat());
+              console.log(panorama.location.latLng.lng());
+              post("/api/updatePosition", {
+                newLocation: {
+                  lat: panorama.location.latLng.lat(),
+                  lng: panorama.location.latLng.lng(),
+                },
+              });
             }
           }}
         />

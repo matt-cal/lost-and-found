@@ -23,6 +23,9 @@ const router = express.Router();
 const socketManager = require("./server-socket");
 const socket = require("socket.io-client/lib/socket");
 const { deletePlayer2 } = require("./server-socket");
+//game logic
+const gameLogic = require("./game-logic");
+
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
 router.get("/whoami", (req, res) => {
@@ -47,6 +50,8 @@ router.get("/user", (req, res) => {
   });
 });
 
+// --------Game State Stuff-------------
+
 router.post("/spawn", (req, res) => {
   if (req.user) {
     console.log("req.user equaled true in router.post(/spawn...");
@@ -59,6 +64,13 @@ router.post("/spawn", (req, res) => {
 router.post("/despawn", (req, res) => {
   if (req.user) {
     socketManager.removeUserFromGame(req.user);
+  }
+  res.send({});
+});
+
+router.post("/updatePosition", (req, res) => {
+  if (req.user) {
+    gameLogic.updatePlayerPosition(req.user._id, req.body.newLocation);
   }
   res.send({});
 });
