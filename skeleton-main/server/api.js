@@ -50,7 +50,8 @@ router.get("/user", (req, res) => {
 router.post("/spawn", (req, res) => {
   if (req.user) {
     console.log("req.user equaled true in router.post(/spawn...");
-    socketManager.addUserToGame(req.user);
+    console.log(`start location: ${req.body.location.lat}, ${req.body.location.lng}`);
+    socketManager.addUserToGame(req.user, req.body.location);
   }
   res.send({});
 });

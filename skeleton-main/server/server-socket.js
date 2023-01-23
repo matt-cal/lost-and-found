@@ -87,7 +87,8 @@ const startRunningGame = () => {
     gameLogic.updateGameState();
     sendGameState();
     // Reset game 5 seconds after someone wins.
-    if (gameLogic.gameState.gameWon != null) {
+    if (gameLogic.gameState.gameWon) {
+      console.log("GAME WON");
       gameLogic.resetWinState();
     }
   }, 1000 / 60); // 60 frames per second
@@ -95,9 +96,9 @@ const startRunningGame = () => {
 
 startRunningGame();
 
-const addUserToGame = (user) => {
+const addUserToGame = (user, startLocation) => {
   console.log("In_addUserToGame: User", user);
-  gameLogic.spawnPlayer(user._id);
+  gameLogic.spawnPlayer(user._id, startLocation);
 };
 
 const removeUserFromGame = (user) => {

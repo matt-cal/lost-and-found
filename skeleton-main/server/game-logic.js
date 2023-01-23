@@ -121,12 +121,15 @@ const gameState = {
 const updateTime = () => {};
 
 /* Player Logic */
-const spawnPlayer = (id) => {
+const spawnPlayer = (id, startLocation) => {
   console.log("In spawnPlayer function");
   gameState.players[id] = {
-    position: location,
+    position: startLocation,
   };
   console.log("gameState", gameState);
+  console.log(
+    `Start: ${gameState.players[id].position.lat}, ${gameState.players[id].position.lng}`
+  );
 };
 
 const removePlayer = (id) => {
@@ -155,7 +158,7 @@ const checkWin = () => {
   });
 };
 const updateGameState = () => {
-  checkWin();
+  gameState.gameWon = checkWin();
 };
 
 const resetWinState = () => {

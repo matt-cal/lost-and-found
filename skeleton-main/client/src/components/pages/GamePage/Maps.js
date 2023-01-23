@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { GoogleMap, useJsApiLoader, StreetViewPanorama, Marker } from "@react-google-maps/api";
+import { post } from "../../../utilities";
 
 const containerStyle = {
   width: "100%",
@@ -135,9 +136,11 @@ function Maps() {
               }}
               onDblClick={(e) => {
                 const marker = markers[location.label];
+                const startLocation = getStartPosition(location);
+                post("/api/spawn", { location: startLocation });
                 marker.setVisible(false);
                 panorama.setVisible(true);
-                panorama.setPosition(getStartPosition(location));
+                panorama.setPosition(startLocation);
                 setInsidePano(true);
               }}
             />
