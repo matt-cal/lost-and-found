@@ -59,6 +59,20 @@ const deleteLobby = (user, key) => {
   const player2Socket = getSocketFromUserID(player2Id);
   player2Socket.emit("displayHostLeft", "HOST LEFT");
 };
+const deletePlayer2 = (user, key) => {
+  const player1Id = gameLogic.deletePlayer2(user, key);
+  const player1Socket = getSocketFromUserID(player1Id);
+  player1Socket.emit("resetPlayer2", "PLAYER2 LEFT");
+};
+const isValidKey = (key) => {
+  return gameLogic.isValidKey(key);
+};
+
+const startGame = (user, key) => {
+  const player2Id = gameLogic.startGame(user, key);
+  const player2Socket = getSocketFromUserID(player2Id);
+  player2Socket.emit("gameHasStarted", true);
+};
 /*------------------------ End of Lobby System----------------------*/
 
 /** Send game state to client */
@@ -137,5 +151,8 @@ module.exports = {
   getUserName: getUserName,
   getOtherPlayerName: getOtherPlayerName,
   deleteLobby: deleteLobby,
+  deletePlayer2: deletePlayer2,
   getIo: () => io,
+  isValidKey: isValidKey,
+  startGame: startGame,
 };

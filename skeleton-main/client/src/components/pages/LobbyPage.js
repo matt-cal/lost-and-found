@@ -1,4 +1,4 @@
-import { Link } from "@reach/router";
+import { Link, useNavigate } from "@reach/router";
 import React, { useState, useEffect } from "react";
 import { get, post } from "../../utilities.js";
 import "../../utilities.css";
@@ -6,13 +6,16 @@ import "./LobbyPage.css";
 import { socket } from "../../client-socket.js";
 
 const LobbyPage = (props) => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [inputedKey, setInputedKey] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
   const getUsername = () => {
     get("/api/getUsername").then((res) => {
       return res.username;
     });
   };
-
-  const [username, setUsername] = useState("");
 
   socket.on("username", (data) => setUsername(data));
 
@@ -34,6 +37,32 @@ const LobbyPage = (props) => {
     });
   };
 
+  const EnterKeyModal = (
+    <span>
+      <input
+        type="text"
+        placeholder="Enter Key: XYWUDH"
+        onChange={(e) => {
+          setInputedKey(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          post("/api/isValidKey", { key: inputedKey }).then((response) => {
+            if (response) {
+              post("/api/joinLobby", { userid: props.userId, enteredKey: inputedKey });
+              navigate("/waitingroom");
+            } else {
+              window.alert("That is not a Valid Key");
+            }
+          });
+        }}
+      >
+        Submit
+      </button>
+    </span>
+  );
+
   return (
     <>
       <nav className="main-content">
@@ -54,14 +83,12 @@ const LobbyPage = (props) => {
           <button
             className="Join-Button"
             onClick={() => {
-              let key = window.prompt("Enter your key");
-              post("/api/joinLobby", { userid: props.userId, enteredKey: key });
+              setShowModal(!showModal);
             }}
           >
-            <Link to="/waitingroom" className="Join-Button">
-              Join
-            </Link>
+            Join
           </button>
+          {showModal ? EnterKeyModal : <span></span>}
           <div className="LobbyPage-username-container">
             <div>Username: {username}</div>
             <input

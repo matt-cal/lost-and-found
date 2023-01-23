@@ -22,6 +22,7 @@ const router = express.Router();
 //initialize socket
 const socketManager = require("./server-socket");
 const socket = require("socket.io-client/lib/socket");
+const { deletePlayer2 } = require("./server-socket");
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
 router.get("/whoami", (req, res) => {
@@ -102,6 +103,23 @@ router.post("/joinLobby", (req, res) => {
 router.post("/deleteLobby", (req, res) => {
   if (req.user) {
     socketManager.deleteLobby(req.user, req.body.key);
+  }
+});
+
+router.post("/deletePlayer2", (req, res) => {
+  if (req.user) {
+    socketManager.deletePlayer2(req.user, req.body.key);
+  }
+});
+
+router.post("/isValidKey", (req, res) => {
+  if (req.user) {
+    res.send(socketManager.isValidKey(req.body.key));
+  }
+});
+router.post("/startGame", (req, res) => {
+  if (req.user) {
+    socketManager.startGame(req.user, req.body.key);
   }
 });
 /*----------------------  END OF LOBBY SYSTEM  --------------------------*/

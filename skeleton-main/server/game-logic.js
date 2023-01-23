@@ -72,9 +72,40 @@ const deleteLobby = (user, key) => {
       player2Id = playerID;
     }
   }
-  console.log("game-logic: allLobbies: before", allLobbies);
   delete allLobbies[key];
-  console.log("game-logic: allLobbies: after", allLobbies);
+  return player2Id;
+};
+
+const deletePlayer2 = (user, key) => {
+  let player1Id;
+  const lobby = allLobbies[key];
+  for (const playerID in lobby.players) {
+    if (playerID !== user._id) {
+      player1Id = playerID;
+    }
+  }
+  delete allLobbies[key].players[user._id];
+  return player1Id;
+};
+const isValidKey = (key) => {
+  for (const lobbyKey in allLobbies) {
+    if (lobbyKey === key) {
+      return true;
+    }
+  }
+  return false;
+};
+const startGame = (user, key) => {
+  let player2Id;
+  const lobby = allLobbies[key];
+  for (const playerID in lobby.players) {
+    if (playerID !== user._id) {
+      player2Id = playerID;
+    }
+  }
+
+  allLobbies[key].hasGameStarted = true; // THIS IS TEMPORARY // NEED TO CHANGE
+
   return player2Id;
 };
 /*------------------ End of Lobby System-------------------  */
@@ -145,4 +176,7 @@ module.exports = {
   getUserName,
   getOtherPlayerName,
   deleteLobby,
+  deletePlayer2,
+  isValidKey,
+  startGame,
 };
