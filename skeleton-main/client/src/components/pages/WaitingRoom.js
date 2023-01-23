@@ -12,9 +12,11 @@ const WaitingRoom = (props) => {
   const [didHostLeave, setDidHostLeave] = useState(false);
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
   const navigate = useNavigate();
+
   // Gets Lobby Key //
   useEffect(() => {
     const callback = (key) => {
+      console.log("Actual Key", key);
       setGameKey({ key: key });
     };
 
@@ -28,6 +30,7 @@ const WaitingRoom = (props) => {
   useEffect(() => {
     if (gameKey.key !== "XXXXXX") {
       //Ensures this useEffect doesn't happen on initial load
+      console.log("Getting Host Status...", gameKey);
       post("/api/getHostStatus", gameKey).then((data) => {
         if (data.isHost) {
           setIsHost(true);
@@ -172,9 +175,10 @@ const WaitingRoom = (props) => {
       {htmlLeftBar}
       {isPlayer2Here
         ? isHost
-          ? htmlActiveStartButton
-          : htmleDisbaledStartActive
-        : htmlDisplayNothing}
+          ? htmlActiveStartButton // If Player2 is here and you are Host
+          : htmleDisbaledStartActive // If player2 is Here but you are not host
+        : htmlDisplayNothing}{" "}
+      {/* If player2 is not Here*/}
       {htmlRightBar}
     </div>
   ) : (

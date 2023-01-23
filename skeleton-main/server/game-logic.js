@@ -46,6 +46,7 @@ const joinLobby = (user, key) => {
 
 const getHostStatus = (user, key) => {
   const lobby = allLobbies[key];
+  console.log("In getHostStatus...", lobby);
   return lobby.players[user._id].isHost;
 };
 
@@ -64,7 +65,7 @@ const getOtherPlayerName = (user, key) => {
   return "Waiting for Player2...";
 };
 const deleteLobby = (user, key) => {
-  let player2Id;
+  let player2Id = null;
   const lobby = allLobbies[key];
   console.log("game-logic: deleteLobby", lobby);
   for (const playerID in lobby.players) {

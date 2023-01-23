@@ -56,8 +56,10 @@ const getOtherPlayerName = (user, key) => {
 
 const deleteLobby = (user, key) => {
   const player2Id = gameLogic.deleteLobby(user, key);
-  const player2Socket = getSocketFromUserID(player2Id);
-  player2Socket.emit("displayHostLeft", "HOST LEFT");
+  if (player2Id !== null) {
+    const player2Socket = getSocketFromUserID(player2Id);
+    player2Socket.emit("displayHostLeft", "HOST LEFT");
+  }
 };
 const deletePlayer2 = (user, key) => {
   const player1Id = gameLogic.deletePlayer2(user, key);
@@ -132,6 +134,7 @@ module.exports = {
     io.on("connection", (socket) => {
       console.log(`socket has connected ${socket.id}`);
       socket.on("disconnect", (reason) => {
+        console.log("Reason for Disconnection", reason);
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
       });
