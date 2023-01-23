@@ -101,7 +101,6 @@ router.post("/getOtherPlayerName", (req, res) => {
 
 router.post("/getHostStatus", (req, res) => {
   if (req.user) {
-    console.log("REQQQQ", req.body.key);
     res.send({ isHost: socketManager.getHostStatus(req.user, req.body.key), user: req.user });
   }
 });
