@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GoogleMap, useJsApiLoader, StreetViewPanorama, Marker } from "@react-google-maps/api";
-import { post } from "../../../utilities";
+import { post, get } from "../../../utilities";
 
 const containerStyle = {
   width: "100%",
@@ -104,13 +104,22 @@ function Maps() {
           }}
           onPositionChanged={() => {
             if (insidePano) {
-              console.log(panorama.location.latLng.lat());
-              console.log(panorama.location.latLng.lng());
+              let newLocation = {
+                lat: panorama.location.latLng.lat(),
+                lng: panorama.location.latLng.lng(),
+              };
+              console.log(newLocation.lat);
+              console.log(newLocation.lng);
               post("/api/updatePosition", {
-                newLocation: {
-                  lat: panorama.location.latLng.lat(),
-                  lng: panorama.location.latLng.lng(),
-                },
+                newLocation: newLocation,
+              });
+              // can remove this post request
+              post("/api/calculateDistance", {
+                location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
+                location2: newLocation,
+                test: "test",
+              }).then((res) => {
+                console.log(res.distance);
               });
             }
           }}

@@ -75,6 +75,13 @@ router.post("/updatePosition", (req, res) => {
   res.send({});
 });
 
+router.post("/calculateDistance", (req, res) => {
+  if (req.user) {
+    let dist = gameLogic.calcDistance(req.body.location1, req.body.location2);
+    res.send({ distance: dist });
+  }
+});
+
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
