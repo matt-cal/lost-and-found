@@ -7,7 +7,6 @@ import HomePage from "./pages/HomePage.js";
 import LobbyPage from "./pages/LobbyPage.js";
 import NavBar from "./modules/NavBar.js";
 import Game from "./pages/GamePage/Game.js";
-
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
@@ -57,7 +56,7 @@ const App = () => {
           />
           <LobbyPage path="/lobby" userId={userId} />
           <WaitingRoom path="/waitingroom" userId={userId} />
-          <Game path="/Game" userId={userId} />
+          <Game path="/Game" userId={userId}/>
           <NotFound default />
         </Router>
       </div>

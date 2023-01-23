@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { GoogleMap, useJsApiLoader, StreetViewPanorama, Marker } from "@react-google-maps/api";
 import { post, get } from "../../../utilities";
+import CountDownTimer from "../../modules/Timer";
 
 const containerStyle = {
   width: "100%",
@@ -41,7 +42,7 @@ const markerCoordinates = [
 function Maps() {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
+    id: "google-map-script", 
     googleMapsApiKey: "AIzaSyDMGy9-oVsU4Ei80p5oaAq1SPGFnPlmPjs",
   });
 
@@ -68,10 +69,50 @@ function Maps() {
     return location.startPositions[ix];
   };
 
+
+  const CountDownTimer = ({hoursMinSecs}) => {
+   
+    const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
+    const [[hrs, mins, secs], setTime] = React.useState([hours, minutes, seconds]);
+    
+
+    const tick = () => {
+   
+        if (hrs === 0 && mins === 0 && secs === 0) 
+            reset()
+        else if (mins === 0 && secs === 0) {
+            setTime([hrs - 1, 59, 59]);
+        } else if (secs === 0) {
+            setTime([hrs, mins - 1, 59]);
+        } else {
+            setTime([hrs, mins, secs - 1]);
+        }
+    };
+
+
+    const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
+
+    
+    React.useEffect(() => {
+        const timerId = setInterval(() => tick(), 1000);
+        return () => clearInterval(timerId);
+    });
+
+    
+    return (
+        <div>
+            <p>{`${hrs.toString().padStart(2, '0')}:${mins
+            .toString()
+            .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</p> 
+        </div>
+    );
+}
+  const hoursMinSecs = { hours: 0, minutes: 5, seconds: 60 } 
+   
+
   return isLoaded ? (
     <>
-      // Map Object //
-      <GoogleMap
+      <GoogleMap className='Map-Container'
         mapContainerStyle={containerStyle}
         center={mapCenter}
         zoom={2}
@@ -158,13 +199,16 @@ function Maps() {
                 panorama.setVisible(true);
                 panorama.setPosition(startLocation);
                 setInsidePano(true);
+                // CountDownTimer({hoursMinSecs})
               }}
             />
           );
         })}
-        //End of Markers //
       </GoogleMap>
-      // End of Map Object //
+      <div className="Timer-Container">
+      <CountDownTimer hoursMinSecs={hoursMinSecs}>
+      </CountDownTimer>
+      </div>
     </>
   ) : (
     <></>

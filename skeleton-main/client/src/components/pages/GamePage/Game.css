@@ -1,0 +1,25 @@
+
+.Map-Containter{
+    position:absolute;
+}
+
+.Timer-Container{
+    position: relative; 
+    background-color: rgba(240, 248, 255, 0.452);
+  padding: 0px;
+  margin: 0;
+  width: 220px;
+  height: 70px;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -100px;
+  filter: drop-shadow(4px 8px 4px #b1b1b1);
+  text-decoration: none;
+}
+
+.Timer-Text{
+  font: bold;
+  font-size: 50px;
+  text-align: center;
+}
