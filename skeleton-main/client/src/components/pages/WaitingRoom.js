@@ -3,6 +3,7 @@ import "./WaitingRoom.css";
 import { get, post } from "../../utilities.js";
 import { socket } from "../../client-socket.js";
 import { Link, useNavigate } from "@reach/router";
+import Game from "./GamePage/Game";
 
 const WaitingRoom = (props) => {
   const [player1, setPlayer1] = useState({ name: "" });
@@ -11,7 +12,7 @@ const WaitingRoom = (props) => {
   const [isHost, setIsHost] = useState("DefaultValue");
   const [didHostLeave, setDidHostLeave] = useState(false);
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
-  const navigate = useNavigate();
+  const [hasGameStarted, setHasGameStarted] = useState(false);
 
   // Gets Lobby Key //
   useEffect(() => {
@@ -83,7 +84,7 @@ const WaitingRoom = (props) => {
       setDidHostLeave(true);
     };
     const callback4 = (response) => {
-      navigate("/Game");
+      setHasGameStarted(true);
     };
     //Ensures this useEffect doesn't happen on initial load
     if (isHost !== "DefaultValue") {
@@ -120,7 +121,7 @@ const WaitingRoom = (props) => {
 
   const startGame = () => {
     post("/api/startGame", gameKey);
-    navigate("/Game");
+    setHasGameStarted(true);
   };
 
   /****************** <HTML/>  ********************/
@@ -171,16 +172,20 @@ const WaitingRoom = (props) => {
   );
 
   return !didHostLeave ? (
-    <div className="WaitingRoom-container">
-      {htmlLeftBar}
-      {isPlayer2Here
-        ? isHost
-          ? htmlActiveStartButton // If Player2 is here and you are Host
-          : htmleDisbaledStartActive // If player2 is Here but you are not host
-        : htmlDisplayNothing}{" "}
-      {/* If player2 is not Here*/}
-      {htmlRightBar}
-    </div>
+    !hasGameStarted ? (
+      <div className="WaitingRoom-container">
+        {htmlLeftBar}
+        {isPlayer2Here
+          ? isHost
+            ? htmlActiveStartButton // If Player2 is here and you are Host
+            : htmleDisbaledStartActive // If player2 is Here but you are not host
+          : htmlDisplayNothing}{" "}
+        {/* If player2 is not Here */}
+        {htmlRightBar}
+      </div>
+    ) : (
+      <Game gameKey={gameKey} isHost={isHost} />
+    )
   ) : (
     htmlHostLeftScreen // Host Left
   );

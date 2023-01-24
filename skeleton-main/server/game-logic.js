@@ -21,11 +21,19 @@ const createLobby = (user, lobbyKey) => {
   const lobby = {
     lobbyKey: lobbyKey,
     players: {},
-    hasGameStarted: false,
+    gameInfo: {
+      startTime: 1000,
+      hotAndCold: false,
+    },
+    gameState: {
+      gameCity: null,
+      isGameOngoing: false,
+      hasGameBeenOne: false,
+    },
   };
   console.log("Lobby ${lobbyKey} has been created");
   // Adding Host to Game
-  lobby.players[user._id] = { userName: user.username, isHost: true };
+  lobby.players[user._id] = { userName: user.username, isHost: true, position: null };
   console.log("Player1 was added to Lobby ${lobbyKey} as Host");
   // Add Lobby to allLobbies queue
   allLobbies[lobbyKey] = lobby;
@@ -39,7 +47,7 @@ const joinLobby = (user, key) => {
     hostID = id;
   }
   // Adds Player2 to Lobby
-  allLobbies[key].players[user._id] = { userName: user.username, isHost: false };
+  allLobbies[key].players[user._id] = { userName: user.username, isHost: false, position: null };
   console.log("Player2 was added to Lobby ${key} as host");
   return hostID;
 };
@@ -104,8 +112,8 @@ const startGame = (user, key) => {
       player2Id = playerID;
     }
   }
-
-  allLobbies[key].hasGameStarted = true; // THIS IS TEMPORARY // NEED TO CHANGE
+  // WHAT HAPPENS WHEN GAME STARTS // PUT HERE //
+  allLobbies[key].gameState.isGameOngoing = true;
 
   return player2Id;
 };
@@ -136,6 +144,7 @@ const calcDistance = (location1, location2) => {
     return dist;
   }
 };
+const createGame = () => {};
 
 /* GameState */
 const gameState = {
@@ -165,13 +174,16 @@ const removePlayer = (id) => {
   }
 };
 
-const updatePlayerPosition = (id, newCoords) => {
+const updatePlayerPosition = (key, id, newCoords) => {
+  console.log("playerPosition", allLobbies[key].players[id].position);
+  allLobbies[key].players[id].position = newCoords;
+
   // If player doesn't exist, don't move anything
-  if (gameState.players[id] == undefined) {
-    return;
-  }
-  console.log(`New Location: ${newCoords.lat}, ${newCoords.lng}`);
-  gameState.players[id].position = newCoords;
+  // if (gameState.players[id] == undefined) {
+  //   return;
+  // }
+  // console.log(`New Location: ${newCoords.lat}, ${newCoords.lng}`);
+  // gameState.players[id].position = newCoords;
 };
 
 const checkWin = () => {

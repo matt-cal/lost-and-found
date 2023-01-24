@@ -147,6 +147,7 @@ router.get("/activeUsers", (req, res) => {
   res.send({ activeUsers: socketManager.getAllConnectedUsers() });
 });
 
+/*----------------------- UserName System---------------------------------*/
 router.get("/getUsername", (req, res) => {
   User.findOne({ name: req.user.name }).then((user) => {
     console.log(`found user: ${user.username}`);
@@ -162,6 +163,7 @@ router.post("/changeUsername", (req, res) => {
   });
   res.send({ message: "updated username" });
 });
+/*----------------------- End of UserName System---------------------------------*/
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

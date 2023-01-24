@@ -73,7 +73,12 @@ const isValidKey = (key) => {
 const startGame = (user, key) => {
   const player2Id = gameLogic.startGame(user, key);
   const player2Socket = getSocketFromUserID(player2Id);
+  const player1Id = user._id;
+
+  // Allows Player2 to Navigate to Game Page
   player2Socket.emit("gameHasStarted", true);
+
+  // Gives Game Page The Key to Player 1 //player1Socket.emit("getGameKey", key);
 };
 /*------------------------ End of Lobby System----------------------*/
 

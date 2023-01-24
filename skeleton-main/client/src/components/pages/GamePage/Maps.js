@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { GoogleMap, useJsApiLoader, StreetViewPanorama, Marker } from "@react-google-maps/api";
 import { post, get } from "../../../utilities";
 import CountDownTimer from "../../modules/Timer";
+import "./Maps.css";
 
 const containerStyle = {
   width: "100%",
-  height: "400px",
+  height: "100% ",
 };
 
 const center = {
   lat: -3.745,
   lng: -38.523,
 };
+
+//Used to Center Map during "Pick a Location Screen" to mimic typcial map structure;
+//ie. North America on the left, Europe/ Africa in middle and Asia on the right
 const mapCenter = {
   lat: 20,
   lng: 0,
@@ -42,7 +46,7 @@ const markerCoordinates = [
 function Maps() {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script", 
+    id: "google-map-script",
     googleMapsApiKey: "AIzaSyDMGy9-oVsU4Ei80p5oaAq1SPGFnPlmPjs",
   });
 
@@ -51,10 +55,6 @@ function Maps() {
   const [panorama, setPanorama] = useState(null);
   const [markers, setMarkers] = useState({});
   const [insidePano, setInsidePano] = useState(false);
-
-  const getPanorama = () => {
-    return panorama;
-  };
 
   const getRandomInt = (min, max) => {
     // The maximum is exclusive and the minimum is inclusive
@@ -69,50 +69,42 @@ function Maps() {
     return location.startPositions[ix];
   };
 
-
-  const CountDownTimer = ({hoursMinSecs}) => {
-   
+  const CountDownTimer = ({ hoursMinSecs }) => {
     const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
     const [[hrs, mins, secs], setTime] = React.useState([hours, minutes, seconds]);
-    
 
     const tick = () => {
-   
-        if (hrs === 0 && mins === 0 && secs === 0) 
-            reset()
-        else if (mins === 0 && secs === 0) {
-            setTime([hrs - 1, 59, 59]);
-        } else if (secs === 0) {
-            setTime([hrs, mins - 1, 59]);
-        } else {
-            setTime([hrs, mins, secs - 1]);
-        }
+      if (hrs === 0 && mins === 0 && secs === 0) reset();
+      else if (mins === 0 && secs === 0) {
+        setTime([hrs - 1, 59, 59]);
+      } else if (secs === 0) {
+        setTime([hrs, mins - 1, 59]);
+      } else {
+        setTime([hrs, mins, secs - 1]);
+      }
     };
-
 
     const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
 
-    
     React.useEffect(() => {
-        const timerId = setInterval(() => tick(), 1000);
-        return () => clearInterval(timerId);
+      const timerId = setInterval(() => tick(), 1000);
+      return () => clearInterval(timerId);
     });
 
-    
     return (
-        <div>
-            <p>{`${hrs.toString().padStart(2, '0')}:${mins
-            .toString()
-            .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</p> 
-        </div>
+      <div>
+        <p>{`${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs
+          .toString()
+          .padStart(2, "0")}`}</p>
+      </div>
     );
-}
-  const hoursMinSecs = { hours: 0, minutes: 5, seconds: 60 } 
-   
+  };
+  const hoursMinSecs = { hours: 0, minutes: 5, seconds: 60 };
 
   return isLoaded ? (
     <>
-      <GoogleMap className='Map-Container'
+      <GoogleMap
+        className="Map-Container"
         mapContainerStyle={containerStyle}
         center={mapCenter}
         zoom={2}
@@ -128,7 +120,6 @@ function Maps() {
           keyboardShortcuts: false,
         }}
       >
-        // Panorama //
         <StreetViewPanorama
           visible={false}
           center={center}
@@ -165,7 +156,6 @@ function Maps() {
             }
           }}
         />
-        // End of Panorama // // Markers //
         {markerCoordinates.map((location) => {
           return (
             <Marker
@@ -206,8 +196,7 @@ function Maps() {
         })}
       </GoogleMap>
       <div className="Timer-Container">
-      <CountDownTimer hoursMinSecs={hoursMinSecs}>
-      </CountDownTimer>
+        <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
       </div>
     </>
   ) : (
