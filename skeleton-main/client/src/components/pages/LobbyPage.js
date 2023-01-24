@@ -100,6 +100,7 @@ const LobbyPage = (props) => {
             />
             <button onClick={changeUsername}>Change Username</button>
             <button onClick={getUsername}>Get Username</button>
+            <Link to="/Game">Shortcut to Game</Link>
           </div>
         </div>
       </nav>

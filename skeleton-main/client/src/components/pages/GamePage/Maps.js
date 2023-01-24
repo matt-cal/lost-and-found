@@ -6,7 +6,7 @@ import "./Maps.css";
 
 const containerStyle = {
   width: "100%",
-  height: "100% ",
+  height: "650px",
 };
 
 const center = {
