@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, useJsApiLoader, StreetViewPanorama, Marker } from "@react-google-maps/api";
 import { post, get } from "../../../utilities";
 import CountDownTimer from "../../modules/Timer";
 import "./Maps.css";
+import { socket } from "../../../client-socket.js";
 
 const containerStyle = {
   width: "100%",
@@ -42,8 +43,10 @@ const markerCoordinates = [
     startPositions: [{ lat: 34.01820940007115, lng: -118.2999255824083 }],
   },
 ];
-
-function Maps() {
+// PROPS
+// props.gameKey
+// props.isHost
+function Maps(props) {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -55,6 +58,9 @@ function Maps() {
   const [panorama, setPanorama] = useState(null);
   const [markers, setMarkers] = useState({});
   const [insidePano, setInsidePano] = useState(false);
+
+  const [spawnPlayer2, setSpawnPlayer2] = useState(false);
+  const [player2Start, setPlayer2Start] = useState(null);
 
   const getRandomInt = (min, max) => {
     // The maximum is exclusive and the minimum is inclusive
@@ -68,6 +74,15 @@ function Maps() {
     let ix = getRandomInt(0, location.startPositions.length);
     return location.startPositions[ix];
   };
+
+  useEffect(() => {
+    if (!props.isHost) {
+      socket.on("spawnPlayer2", (startLocation) => {
+        setSpawnPlayer2(true);
+        setPlayer2Start(startLocation);
+      });
+    }
+  }, []);
 
   const CountDownTimer = ({ hoursMinSecs }) => {
     const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
@@ -100,6 +115,78 @@ function Maps() {
     );
   };
   const hoursMinSecs = { hours: 0, minutes: 5, seconds: 60 };
+
+  const player2Pano = () => {
+    panorama.setVisible(true);
+    panorama.setPosition(player2Start);
+    setInsidePano(true);
+  };
+
+  if (spawnPlayer2) {
+    return (
+      <>
+        <GoogleMap
+          className="Map-Container"
+          mapContainerStyle={containerStyle}
+          center={mapCenter}
+          zoom={2}
+          onLoad={(map) => {
+            setMap(map);
+          }}
+          onUnmount={(map) => {
+            setMap(null);
+          }}
+          options={{
+            disableDefaultUI: true,
+            gestureHandling: "none",
+            keyboardShortcuts: false,
+          }}
+        >
+          <StreetViewPanorama
+            visible={spawnPlayer2}
+            center={center}
+            onUnmount={(panorama) => {
+              console.log("onUnmount", panorama);
+            }}
+            onLoad={(panorama) => {
+              panorama.setOptions({
+                addressControl: false,
+                fullscreenControl: false,
+                enableCloseButton: false,
+              });
+              setPanorama(panorama);
+            }}
+            onPositionChanged={() => {
+              if (insidePano) {
+                let newLocation = {
+                  lat: panorama.location.latLng.lat(),
+                  lng: panorama.location.latLng.lng(),
+                };
+                console.log(newLocation.lat);
+                console.log(newLocation.lng);
+                post("/api/updatePosition", {
+                  newLocation: newLocation,
+                  key: props.gameKey,
+                });
+                // can remove this post request
+                post("/api/calculateDistance", {
+                  location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
+                  location2: newLocation,
+                  test: "test",
+                }).then((res) => {
+                  console.log(res.distance);
+                });
+              }
+            }}
+          />
+        </GoogleMap>
+        <div className="Timer-Container">
+          <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
+        </div>
+        <button onClick={player2Pano}>start</button>
+      </>
+    );
+  }
 
   return isLoaded ? (
     <>
@@ -144,6 +231,7 @@ function Maps() {
               console.log(newLocation.lng);
               post("/api/updatePosition", {
                 newLocation: newLocation,
+                key: props.gameKey,
               });
               // can remove this post request
               post("/api/calculateDistance", {
@@ -182,14 +270,16 @@ function Maps() {
                 }
               }}
               onDblClick={(e) => {
-                const marker = markers[location.label];
-                const startLocation = getStartPosition(location);
-                post("/api/spawn", { location: startLocation });
-                marker.setVisible(false);
-                panorama.setVisible(true);
-                panorama.setPosition(startLocation);
-                setInsidePano(true);
-                // CountDownTimer({hoursMinSecs})
+                if (props.isHost) {
+                  const marker = markers[location.label];
+                  const startLocation = getStartPosition(location);
+                  post("/api/spawn", { location: startLocation });
+                  marker.setVisible(false);
+                  panorama.setVisible(true);
+                  panorama.setPosition(startLocation);
+                  setInsidePano(true);
+                  // CountDownTimer({hoursMinSecs})
+                }
               }}
             />
           );

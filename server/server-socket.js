@@ -106,6 +106,7 @@ startRunningGame();
 const addUserToGame = (user, startLocation) => {
   console.log("In_addUserToGame: User", user);
   gameLogic.spawnPlayer(user._id, startLocation);
+  io.emit("spawnPlayer2", startLocation);
 };
 
 const removeUserFromGame = (user) => {
