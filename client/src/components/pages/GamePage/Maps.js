@@ -75,6 +75,7 @@ function Maps(props) {
     return location.startPositions[ix];
   };
 
+  // only for player 2 (not host)
   useEffect(() => {
     if (!props.isHost) {
       socket.on("spawnPlayer2", (startLocation) => {
@@ -83,6 +84,13 @@ function Maps(props) {
       });
     }
   }, []);
+
+  // will set player 2's position once received from socket
+  useEffect(() => {
+    if (spawnPlayer2) {
+      panorama.setPosition(player2Start);
+    }
+  }, [player2Start]);
 
   const CountDownTimer = ({ hoursMinSecs }) => {
     const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
@@ -116,12 +124,7 @@ function Maps(props) {
   };
   const hoursMinSecs = { hours: 0, minutes: 5, seconds: 60 };
 
-  const player2Pano = () => {
-    panorama.setVisible(true);
-    panorama.setPosition(player2Start);
-    setInsidePano(true);
-  };
-
+  // loads streetview for player 2 once host selects location
   if (spawnPlayer2) {
     return (
       <>
@@ -183,7 +186,6 @@ function Maps(props) {
         <div className="Timer-Container">
           <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
         </div>
-        <button onClick={player2Pano}>start</button>
       </>
     );
   }
