@@ -43,6 +43,7 @@ const markerCoordinates = [
     startPositions: [{ lat: 34.01820940007115, lng: -118.2999255824083 }],
   },
 ];
+
 // PROPS
 // props.gameKey
 // props.isHost
@@ -69,10 +70,18 @@ function Maps(props) {
     return Math.floor(Math.random() * (max - min) + min);
   };
 
-  const getStartPosition = (location) => {
-    // return random start position of location
-    let ix = getRandomInt(0, location.startPositions.length);
-    return location.startPositions[ix];
+  // get two unique start locations, returned as elements in an array
+  const getStartPositions = (location) => {
+    // get a random index that corresponds to a start position of given location
+    const index1 = getRandomInt(0, location.startPositions.length);
+    let index2 = index1;
+    // get a new index until different from first index
+    while (index2 === index1) {
+      index2 = getRandomInt(0, location.startPositions.length);
+    }
+    const location1 = location.startPositions[index1];
+    const location2 = location.startPositions[index2];
+    return [location1, location2];
   };
 
   // only for player 2 (not host)
@@ -89,6 +98,7 @@ function Maps(props) {
   useEffect(() => {
     if (spawnPlayer2) {
       panorama.setPosition(player2Start);
+      setInsidePano(true);
     }
   }, [player2Start]);
 
@@ -190,6 +200,7 @@ function Maps(props) {
     );
   }
 
+  // initially loaded for both players
   return isLoaded ? (
     <>
       <GoogleMap
@@ -274,11 +285,18 @@ function Maps(props) {
               onDblClick={(e) => {
                 if (props.isHost) {
                   const marker = markers[location.label];
-                  const startLocation = getStartPosition(location);
-                  post("/api/spawn", { location: startLocation });
+                  // get both starting locations when host selects location
+                  const startLocations = getStartPositions(location);
+                  const startLocation1 = startLocations[0];
+                  const startLocation2 = startLocations[1];
+                  post("/api/spawn", {
+                    startLocation1: startLocation1,
+                    startLocation2: startLocation2,
+                    isHost: props.isHost,
+                  });
                   marker.setVisible(false);
                   panorama.setVisible(true);
-                  panorama.setPosition(startLocation);
+                  panorama.setPosition(startLocation1);
                   setInsidePano(true);
                   // CountDownTimer({hoursMinSecs})
                 }
