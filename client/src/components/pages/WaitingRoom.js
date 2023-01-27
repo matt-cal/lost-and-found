@@ -86,8 +86,12 @@ const WaitingRoom = (props) => {
     const callback4 = (response) => {
       setHasGameStarted(true);
     };
+    const callback5 = (response) => {
+      setHasGameStarted(false);
+    };
     //Ensures this useEffect doesn't happen on initial load
     if (isHost !== "DefaultValue") {
+      socket.on("resetToWaitingRoom", callback5);
       // Player1 Sockets /// Gets info from Player 2 //
       if (isHost) {
         socket.on("isPlayer2Here", callback1);
@@ -96,6 +100,7 @@ const WaitingRoom = (props) => {
         return () => {
           socket.off("isPlayer2Here", callback1);
           socket.off("resetPlayer2", callback2);
+          socket.off("resetToWaitingRoom", callback5);
         };
         //Player 2 Sockets // Gets info from Player1 //
       } else {
@@ -105,6 +110,7 @@ const WaitingRoom = (props) => {
         return () => {
           socket.off("displayHostLeft", callback3);
           socket.off("gameHasStarted", callback4);
+          socket.off("resetToWaitingRoom", callback5);
         };
       }
     }
@@ -179,7 +185,7 @@ const WaitingRoom = (props) => {
           ? isHost
             ? htmlActiveStartButton // If Player2 is here and you are Host
             : htmleDisbaledStartActive // If player2 is Here but you are not host
-          : htmlDisplayNothing}{" "}
+          : htmlDisplayNothing}
         {/* If player2 is not Here */}
         {htmlRightBar}
       </div>

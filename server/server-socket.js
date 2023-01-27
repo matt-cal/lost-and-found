@@ -3,6 +3,7 @@ let io;
 const socket = require("socket.io-client/lib/socket");
 const gameLogic = require("./game-logic");
 
+const lobbyToGameIntervalId = {};
 const userToSocketMap = {}; // maps user ID to socket object
 const socketToUserMap = {}; // maps socket ID to user object
 
@@ -10,6 +11,7 @@ const getAllConnectedUsers = () => Object.values(socketToUserMap);
 const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
+const getIntervalIdfromLobbyId = (lobbyKey) => lobbyToGameIntervalId[lobbyKey];
 
 /*------------------------ Lobby System----------------------*/
 
@@ -54,7 +56,17 @@ const getOtherPlayerName = (user, key) => {
   return gameLogic.getOtherPlayerName(user, key);
 };
 
+const shutDownRunningGame = (key) => {
+  const intervalID = getIntervalIdfromLobbyId(key);
+  if (intervalID) {
+    console.log("GAME HAS BEEN KILLED");
+    clearInterval(intervalID);
+    delete lobbyToGameIntervalId[key];
+  }
+};
+
 const deleteLobby = (user, key) => {
+  shutDownRunningGame(key);
   const player2Id = gameLogic.deleteLobby(user, key);
   if (player2Id !== null) {
     const player2Socket = getSocketFromUserID(player2Id);
@@ -62,6 +74,7 @@ const deleteLobby = (user, key) => {
   }
 };
 const deletePlayer2 = (user, key) => {
+  shutDownRunningGame(key);
   const player1Id = gameLogic.deletePlayer2(user, key);
   const player1Socket = getSocketFromUserID(player1Id);
   player1Socket.emit("resetPlayer2", "PLAYER2 LEFT");
@@ -73,35 +86,36 @@ const isValidKey = (key) => {
 const startGame = (user, key) => {
   const player2Id = gameLogic.startGame(user, key);
   const player2Socket = getSocketFromUserID(player2Id);
-  const player1Id = user._id;
 
   // Allows Player2 to Navigate to Game Page
   player2Socket.emit("gameHasStarted", true);
 
-  // Gives Game Page The Key to Player 1 //player1Socket.emit("getGameKey", key);
+  // Starts Game //
+  startRunningGame(key, user._id, player2Id);
 };
 /*------------------------ End of Lobby System----------------------*/
 
-/** Send game state to client */
-const sendGameState = () => {
-  io.emit("update", gameLogic.gameState);
-};
-
 /** Start running game: game loop emits game states to all clients at 60 frames per second */
-const startRunningGame = () => {
+const startRunningGame = (key, user1Id, user2Id) => {
   console.log("Game has started");
-  setInterval(() => {
-    gameLogic.updateGameState();
-    sendGameState();
-    // Reset game 5 seconds after someone wins.
-    if (gameLogic.gameState.gameWon) {
-      console.log("GAME WON");
-      gameLogic.resetWinState();
-    }
+  const player1Socket = getSocketFromUserID(user1Id);
+  const player2Socket = getSocketFromUserID(user2Id);
+  const intervalId = setInterval(() => {
+    console.log("Running Game...");
+    const hasWon = gameLogic.checkGameWin(key, user1Id, user2Id);
+    player1Socket.emit("hasWon", hasWon);
+    player2Socket.emit("hasWon", hasWon);
   }, 1000 / 60); // 60 frames per second
+  lobbyToGameIntervalId[key] = intervalId;
 };
-
-startRunningGame();
+const resetToWaitingRoom = (user, key) => {
+  shutDownRunningGame(key);
+  const otherPlayerId = gameLogic.resetPlayerPosition(user._id, key);
+  const mySocket = getSocketFromUserID(user._id);
+  const otherSocket = getSocketFromUserID(otherPlayerId);
+  mySocket.emit("resetToWaitingRoom", "RESET TO WAITING ROOM");
+  otherSocket.emit("resetToWaitingRoom", "RESET TO WAITING ROOM");
+};
 
 const addUserToGame = (user, startLocation) => {
   console.log("In_addUserToGame: User", user);
@@ -164,4 +178,5 @@ module.exports = {
   getIo: () => io,
   isValidKey: isValidKey,
   startGame: startGame,
+  resetToWaitingRoom: resetToWaitingRoom,
 };

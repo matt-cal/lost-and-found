@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, useJsApiLoader, StreetViewPanorama, Marker } from "@react-google-maps/api";
 import { post, get } from "../../../utilities";
 import CountDownTimer from "../../modules/Timer";
 import "./Maps.css";
+import { socket } from "../../../client-socket.js";
+import { Link } from "@reach/router";
 
 const containerStyle = {
   width: "100%",
@@ -43,7 +45,7 @@ const markerCoordinates = [
   },
 ];
 
-function Maps() {
+function Maps(props) {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -55,7 +57,22 @@ function Maps() {
   const [panorama, setPanorama] = useState(null);
   const [markers, setMarkers] = useState({});
   const [insidePano, setInsidePano] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
 
+  // GETS WIN CONDITION //
+  useEffect(() => {
+    const callback1 = (hasWon) => {
+      if (hasWon) {
+        setGameWon(true);
+      }
+    };
+    socket.on("hasWon", callback1);
+    return () => {
+      socket.off("hasWon", callback1);
+    };
+  }, []);
+
+  // Gets Random Start Position //
   const getRandomInt = (min, max) => {
     // The maximum is exclusive and the minimum is inclusive
     min = Math.ceil(min);
@@ -69,37 +86,50 @@ function Maps() {
     return location.startPositions[ix];
   };
 
-  const CountDownTimer = ({ hoursMinSecs }) => {
-    const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
-    const [[hrs, mins, secs], setTime] = React.useState([hours, minutes, seconds]);
-
-    const tick = () => {
-      if (hrs === 0 && mins === 0 && secs === 0) reset();
-      else if (mins === 0 && secs === 0) {
-        setTime([hrs - 1, 59, 59]);
-      } else if (secs === 0) {
-        setTime([hrs, mins - 1, 59]);
-      } else {
-        setTime([hrs, mins, secs - 1]);
-      }
-    };
-
-    const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
-
-    React.useEffect(() => {
-      const timerId = setInterval(() => tick(), 1000);
-      return () => clearInterval(timerId);
-    });
-
-    return (
-      <div>
-        <p>{`${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs
-          .toString()
-          .padStart(2, "0")}`}</p>
-      </div>
-    );
+  /*---------------------------- Handlers--------------------------------------*/
+  // Handles when Either Players Leaves
+  const handleLeaveLobby = () => {
+    // If Host Leaves, Lobby should be Deleted //
+    if (props.isHost) {
+      post("/api/deleteLobby", props.gameKey);
+      // If Player2 Leaves, player2 should be deleted from Lobby
+    } else {
+      post("/api/deletePlayer2", props.gameKey);
+    }
   };
-  const hoursMinSecs = { hours: 0, minutes: 5, seconds: 60 };
+
+  // Ensures Game is Rest if Chosen to Play Agiain //
+  const handleResetGame = () => {
+    setGameWon(false);
+    post("/api/resetToWaitingRoom", props.gameKey);
+  };
+
+  const hoursMinSecs = { hours: 0, minutes: 5, seconds: 59 };
+
+  // Component Function Handlers //
+  const panoOnChangePositionHandler = () => {
+    // Updates Position //
+    if (insidePano) {
+      let newLocation = {
+        lat: panorama.location.latLng.lat(),
+        lng: panorama.location.latLng.lng(),
+      };
+
+      post("/api/updatePosition", {
+        newLocation: newLocation,
+        key: props.gameKey.key,
+      });
+
+      // Can Remove This Post Request //
+      post("/api/calculateDistance", {
+        location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
+        location2: newLocation,
+        test: "test",
+      }).then((res) => {
+        console.log(res.distance);
+      });
+    }
+  };
 
   return isLoaded ? (
     <>
@@ -134,27 +164,7 @@ function Maps() {
             });
             setPanorama(panorama);
           }}
-          onPositionChanged={() => {
-            if (insidePano) {
-              let newLocation = {
-                lat: panorama.location.latLng.lat(),
-                lng: panorama.location.latLng.lng(),
-              };
-              console.log(newLocation.lat);
-              console.log(newLocation.lng);
-              post("/api/updatePosition", {
-                newLocation: newLocation,
-              });
-              // can remove this post request
-              post("/api/calculateDistance", {
-                location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
-                location2: newLocation,
-                test: "test",
-              }).then((res) => {
-                console.log(res.distance);
-              });
-            }
-          }}
+          onPositionChanged={panoOnChangePositionHandler}
         />
         {markerCoordinates.map((location) => {
           return (
@@ -198,6 +208,17 @@ function Maps() {
       <div className="Timer-Container">
         <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
       </div>
+      {gameWon ? (
+        <div id="winScreenContainer">
+          <h2> You Found Each Other </h2>
+          <button onClick={handleLeaveLobby}>
+            <Link to="/lobby"> Quit to Host/Join Screen </Link>
+          </button>
+          <button onClick={handleResetGame}> Back to Waiting Room </button>
+        </div>
+      ) : (
+        <div> You have Not Won yet </div>
+      )}
     </>
   ) : (
     <></>

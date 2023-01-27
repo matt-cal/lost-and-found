@@ -33,7 +33,11 @@ const createLobby = (user, lobbyKey) => {
   };
   console.log("Lobby ${lobbyKey} has been created");
   // Adding Host to Game
-  lobby.players[user._id] = { userName: user.username, isHost: true, position: null };
+  lobby.players[user._id] = {
+    userName: user.username,
+    isHost: true,
+    position: { lat: null, lng: null },
+  };
   console.log("Player1 was added to Lobby ${lobbyKey} as Host");
   // Add Lobby to allLobbies queue
   allLobbies[lobbyKey] = lobby;
@@ -47,7 +51,11 @@ const joinLobby = (user, key) => {
     hostID = id;
   }
   // Adds Player2 to Lobby
-  allLobbies[key].players[user._id] = { userName: user.username, isHost: false, position: null };
+  allLobbies[key].players[user._id] = {
+    userName: user.username,
+    isHost: false,
+    position: { lat: null, lng: null },
+  };
   console.log("Player2 was added to Lobby ${key} as host");
   return hostID;
 };
@@ -118,7 +126,18 @@ const startGame = (user, key) => {
   return player2Id;
 };
 /*------------------ End of Lobby System-------------------  */
+const resetPlayerPosition = (id, key) => {
+  let otherPlayerId;
+  const lobby = allLobbies[key];
+  for (const playerID in lobby.players) {
+    if (playerID !== id) {
+      otherPlayerId = playerID;
+    }
+  }
 
+  allLobbies[key].players[id].position = { lat: null, lng: null };
+  return otherPlayerId;
+};
 // calculate distance in miles between two locations (lat/lng objects)
 const calcDistance = (location1, location2) => {
   let lat1 = location1.lat;
@@ -144,7 +163,6 @@ const calcDistance = (location1, location2) => {
     return dist;
   }
 };
-const createGame = () => {};
 
 /* GameState */
 const gameState = {
@@ -175,28 +193,25 @@ const removePlayer = (id) => {
 };
 
 const updatePlayerPosition = (key, id, newCoords) => {
-  console.log("playerPosition", allLobbies[key].players[id].position);
   allLobbies[key].players[id].position = newCoords;
-
-  // If player doesn't exist, don't move anything
-  // if (gameState.players[id] == undefined) {
-  //   return;
-  // }
-  // console.log(`New Location: ${newCoords.lat}, ${newCoords.lng}`);
-  // gameState.players[id].position = newCoords;
 };
 
-const checkWin = () => {
-  Object.keys(gameState.players).forEach((pid1) => {
-    Object.keys(gameState.players).forEach((pid2) => {
-      if (pid1 !== pid2) {
-        if ((gameState.players[pid1].position = gameState.players[pid2].position)) {
-          return true;
-        }
-      }
-    });
-  });
+const checkGameWin = (key, id1, id2) => {
+  const lobby = allLobbies[key];
+  if (
+    (lobby.players[id1].position.lat != null) &
+    (lobby.players[id1].position.lng != null) &
+    (lobby.players[id2].position.lat != null) &
+    (lobby.players[id2].position.lng != null) &
+    (lobby.players[id1].position.lat === lobby.players[id2].position.lat) &
+    (lobby.players[id1].position.lng === lobby.players[id2].position.lng)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
 };
+
 const updateGameState = () => {
   gameState.gameWon = checkWin();
 };
@@ -223,4 +238,6 @@ module.exports = {
   isValidKey,
   startGame,
   calcDistance,
+  checkGameWin,
+  resetPlayerPosition,
 };

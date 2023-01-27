@@ -52,6 +52,12 @@ router.get("/user", (req, res) => {
 
 // --------Game State Stuff-------------
 
+router.post("/resetToWaitingRoom", (req, res) => {
+  if (req.user) {
+    socketManager.resetToWaitingRoom(req.user, req.body.key);
+  }
+});
+
 router.post("/spawn", (req, res) => {
   if (req.user) {
     console.log("req.user equaled true in router.post(/spawn...");
@@ -70,7 +76,7 @@ router.post("/despawn", (req, res) => {
 
 router.post("/updatePosition", (req, res) => {
   if (req.user) {
-    gameLogic.updatePlayerPosition(req.user._id, req.body.newLocation);
+    gameLogic.updatePlayerPosition(req.body.key, req.user._id, req.body.newLocation);
   }
   res.send({});
 });
