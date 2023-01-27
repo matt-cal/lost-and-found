@@ -143,6 +143,7 @@ function Maps(props) {
         console.log(res.distance);
       });
     }
+  };
   // only for player 2 (not host)
   useEffect(() => {
     if (!props.isHost) {
@@ -157,6 +158,7 @@ function Maps(props) {
   useEffect(() => {
     if (spawnPlayer2) {
       panorama.setPosition(player2Start);
+      panorama.setVisible(true);
       setInsidePano(true);
     }
   }, [player2Start]);
@@ -191,72 +193,6 @@ function Maps(props) {
       </div>
     );
   };
-
-  // loads streetview for player 2 once host selects location
-  if (spawnPlayer2) {
-    return (
-      <>
-        <GoogleMap
-          className="Map-Container"
-          mapContainerStyle={containerStyle}
-          center={mapCenter}
-          zoom={2}
-          onLoad={(map) => {
-            setMap(map);
-          }}
-          onUnmount={(map) => {
-            setMap(null);
-          }}
-          options={{
-            disableDefaultUI: true,
-            gestureHandling: "none",
-            keyboardShortcuts: false,
-          }}
-        >
-          <StreetViewPanorama
-            visible={spawnPlayer2}
-            center={center}
-            onUnmount={(panorama) => {
-              console.log("onUnmount", panorama);
-            }}
-            onLoad={(panorama) => {
-              panorama.setOptions({
-                addressControl: false,
-                fullscreenControl: false,
-                enableCloseButton: false,
-              });
-              setPanorama(panorama);
-            }}
-            onPositionChanged={() => {
-              if (insidePano) {
-                let newLocation = {
-                  lat: panorama.location.latLng.lat(),
-                  lng: panorama.location.latLng.lng(),
-                };
-                console.log(newLocation.lat);
-                console.log(newLocation.lng);
-                post("/api/updatePosition", {
-                  newLocation: newLocation,
-                  key: props.gameKey,
-                });
-                // can remove this post request
-                post("/api/calculateDistance", {
-                  location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
-                  location2: newLocation,
-                  test: "test",
-                }).then((res) => {
-                  console.log(res.distance);
-                });
-              }
-            }}
-          />
-        </GoogleMap>
-        <div className="Timer-Container">
-          <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
-        </div>
-      </>
-    );
-  }
 
   // initially loaded for both players
   return isLoaded ? (
