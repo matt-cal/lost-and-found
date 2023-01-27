@@ -45,6 +45,9 @@ const markerCoordinates = [
   },
 ];
 
+// PROPS
+// props.gameKey
+// props.isHost
 function Maps(props) {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
@@ -73,6 +76,9 @@ function Maps(props) {
   }, []);
 
   // Gets Random Start Position //
+  const [spawnPlayer2, setSpawnPlayer2] = useState(false);
+  const [player2Start, setPlayer2Start] = useState(null);
+
   const getRandomInt = (min, max) => {
     // The maximum is exclusive and the minimum is inclusive
     min = Math.ceil(min);
@@ -80,10 +86,18 @@ function Maps(props) {
     return Math.floor(Math.random() * (max - min) + min);
   };
 
-  const getStartPosition = (location) => {
-    // return random start position of location
-    let ix = getRandomInt(0, location.startPositions.length);
-    return location.startPositions[ix];
+  // get two unique start locations, returned as elements in an array
+  const getStartPositions = (location) => {
+    // get a random index that corresponds to a start position of given location
+    const index1 = getRandomInt(0, location.startPositions.length);
+    let index2 = index1;
+    // get a new index until different from first index
+    while (index2 === index1) {
+      index2 = getRandomInt(0, location.startPositions.length);
+    }
+    const location1 = location.startPositions[index1];
+    const location2 = location.startPositions[index2];
+    return [location1, location2];
   };
 
   /*---------------------------- Handlers--------------------------------------*/
@@ -129,8 +143,122 @@ function Maps(props) {
         console.log(res.distance);
       });
     }
+  // only for player 2 (not host)
+  useEffect(() => {
+    if (!props.isHost) {
+      socket.on("spawnPlayer2", (startLocation) => {
+        setSpawnPlayer2(true);
+        setPlayer2Start(startLocation);
+      });
+    }
+  }, []);
+
+  // will set player 2's position once received from socket
+  useEffect(() => {
+    if (spawnPlayer2) {
+      panorama.setPosition(player2Start);
+      setInsidePano(true);
+    }
+  }, [player2Start]);
+
+  const CountDownTimer = ({ hoursMinSecs }) => {
+    const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
+    const [[hrs, mins, secs], setTime] = React.useState([hours, minutes, seconds]);
+
+    const tick = () => {
+      if (hrs === 0 && mins === 0 && secs === 0) reset();
+      else if (mins === 0 && secs === 0) {
+        setTime([hrs - 1, 59, 59]);
+      } else if (secs === 0) {
+        setTime([hrs, mins - 1, 59]);
+      } else {
+        setTime([hrs, mins, secs - 1]);
+      }
+    };
+
+    const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
+
+    React.useEffect(() => {
+      const timerId = setInterval(() => tick(), 1000);
+      return () => clearInterval(timerId);
+    });
+
+    return (
+      <div>
+        <p>{`${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs
+          .toString()
+          .padStart(2, "0")}`}</p>
+      </div>
+    );
   };
 
+  // loads streetview for player 2 once host selects location
+  if (spawnPlayer2) {
+    return (
+      <>
+        <GoogleMap
+          className="Map-Container"
+          mapContainerStyle={containerStyle}
+          center={mapCenter}
+          zoom={2}
+          onLoad={(map) => {
+            setMap(map);
+          }}
+          onUnmount={(map) => {
+            setMap(null);
+          }}
+          options={{
+            disableDefaultUI: true,
+            gestureHandling: "none",
+            keyboardShortcuts: false,
+          }}
+        >
+          <StreetViewPanorama
+            visible={spawnPlayer2}
+            center={center}
+            onUnmount={(panorama) => {
+              console.log("onUnmount", panorama);
+            }}
+            onLoad={(panorama) => {
+              panorama.setOptions({
+                addressControl: false,
+                fullscreenControl: false,
+                enableCloseButton: false,
+              });
+              setPanorama(panorama);
+            }}
+            onPositionChanged={() => {
+              if (insidePano) {
+                let newLocation = {
+                  lat: panorama.location.latLng.lat(),
+                  lng: panorama.location.latLng.lng(),
+                };
+                console.log(newLocation.lat);
+                console.log(newLocation.lng);
+                post("/api/updatePosition", {
+                  newLocation: newLocation,
+                  key: props.gameKey,
+                });
+                // can remove this post request
+                post("/api/calculateDistance", {
+                  location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
+                  location2: newLocation,
+                  test: "test",
+                }).then((res) => {
+                  console.log(res.distance);
+                });
+              }
+            }}
+          />
+        </GoogleMap>
+        <div className="Timer-Container">
+          <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
+        </div>
+      </>
+    );
+  }
+
+  // initially loaded for both players
   return isLoaded ? (
     <>
       <GoogleMap
@@ -192,14 +320,23 @@ function Maps(props) {
                 }
               }}
               onDblClick={(e) => {
-                const marker = markers[location.label];
-                const startLocation = getStartPosition(location);
-                post("/api/spawn", { location: startLocation });
-                marker.setVisible(false);
-                panorama.setVisible(true);
-                panorama.setPosition(startLocation);
-                setInsidePano(true);
-                // CountDownTimer({hoursMinSecs})
+                if (props.isHost) {
+                  const marker = markers[location.label];
+                  // get both starting locations when host selects location
+                  const startLocations = getStartPositions(location);
+                  const startLocation1 = startLocations[0];
+                  const startLocation2 = startLocations[1];
+                  post("/api/spawn", {
+                    startLocation1: startLocation1,
+                    startLocation2: startLocation2,
+                    isHost: props.isHost,
+                  });
+                  marker.setVisible(false);
+                  panorama.setVisible(true);
+                  panorama.setPosition(startLocation1);
+                  setInsidePano(true);
+                  // CountDownTimer({hoursMinSecs})
+                }
               }}
             />
           );

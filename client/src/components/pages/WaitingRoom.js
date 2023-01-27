@@ -46,12 +46,12 @@ const WaitingRoom = (props) => {
   useEffect(() => {
     if (isHost !== "DefaultValue") {
       //Ensures this useEffect doesn't happen on initial load
-      post("/api/getUserName", gameKey).then((data) => {
+      get("/api/getUsername", gameKey).then((data) => {
         if (isHost) {
           console.log("Setting Player1 to Host..");
-          setPlayer1({ name: data.userName });
+          setPlayer1({ name: data.username });
         } else {
-          setPlayer2({ name: data.userName });
+          setPlayer2({ name: data.username });
         }
       });
     }

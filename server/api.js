@@ -61,8 +61,13 @@ router.post("/resetToWaitingRoom", (req, res) => {
 router.post("/spawn", (req, res) => {
   if (req.user) {
     console.log("req.user equaled true in router.post(/spawn...");
-    console.log(`start location: ${req.body.location.lat}, ${req.body.location.lng}`);
-    socketManager.addUserToGame(req.user, req.body.location);
+    console.log(`start location: ${req.body.startLocation1.lat}, ${req.body.startLocation1.lng}`);
+    socketManager.addUserToGame(req.user, req.body.startLocation1);
+
+    // if this is player 1's call, emit socket to player 2 for them to spawn
+    if (req.body.isHost) {
+      socketManager.getIo().emit("spawnPlayer2", req.body.startLocation2);
+    }
   }
   res.send({});
 });

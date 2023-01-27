@@ -65,42 +65,48 @@ const LobbyPage = (props) => {
 
   return (
     <>
-      <nav className="main-content">
+      <nav className="main-container">
         <div className="lobby-title">Lost & Found</div>
-        <div className="Host-Container u-flex-alignCenter u-flexColumn">
-          <button
-            className="Host-Button"
-            onClick={() => {
-              console.log("In onClick in Host Game Button");
-              post("/api/createLobby", { userid: props.userId });
-            }}
-          >
-            <Link to="/waitingroom" className="Host-Button">
-              Host
-            </Link>
-          </button>
+        <div className="LobbyPage-content">
+          <div className="Host-Container u-flex-alignCenter u-flexColumn">
+            <button
+              className="Host-Button"
+              onClick={() => {
+                console.log("In onClick in Host Game Button");
+                post("/api/createLobby", { userid: props.userId });
+              }}
+            >
+              <Link to="/waitingroom" className="Host-Button">
+                Host
+              </Link>
+            </button>
 
-          <button
-            className="Join-Button"
-            onClick={() => {
-              setShowModal(!showModal);
-            }}
-          >
-            Join
-          </button>
-          {showModal ? EnterKeyModal : <span></span>}
-          <div className="LobbyPage-username-container">
-            <div>Username: {username}</div>
-            <input
-              type="text"
-              id="message"
-              name="message"
-              onChange={handleChange}
-              value={message}
-            />
-            <button onClick={changeUsername}>Change Username</button>
-            <button onClick={getUsername}>Get Username</button>
-            <Link to="/Game">Shortcut to Game</Link>
+            <button
+              className="Join-Button"
+              onClick={() => {
+                setShowModal(!showModal);
+              }}
+            >
+              Join
+            </button>
+            {showModal ? EnterKeyModal : <span></span>}
+            <div className="LobbyPage-username-container">
+              <div className="LobbyPage-username-display">
+                Username:
+                <div>{username}</div>
+              </div>
+              <input
+                type="text"
+                placeholder="New Username"
+                className="LobbyPage-username-input"
+                name="message"
+                onChange={handleChange}
+                value={message}
+              />
+              <button className="LobbyPage-username-button" onClick={changeUsername}>
+                Change Username
+              </button>
+            </div>
           </div>
         </div>
       </nav>
