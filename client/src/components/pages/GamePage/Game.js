@@ -4,6 +4,13 @@ import { socket } from "../../../client-socket.js";
 import { get, post } from "../../../utilities.js";
 
 const Game = (props) => {
-  return <Maps gameKey={props.gameKey} isHost={props.isHost} setGameKey={props.setGameKey} />;
+  return (
+    <Maps
+      gameKey={props.gameKey}
+      isHost={props.isHost}
+      setGameKey={props.setGameKey}
+      timer={props.timer}
+    />
+  );
 };
 export default Game;

@@ -58,6 +58,19 @@ router.post("/resetToWaitingRoom", (req, res) => {
   }
 });
 
+router.post("/setTimer", (req, res) => {
+  const time = { hours: req.body.hours, minutes: req.body.minutes, seconds: req.body.seconds };
+  if (req.user) {
+    gameLogic.setTimer(req.body.key, time);
+  }
+  res.send({});
+});
+router.get("/getTimer", (req, res) => {
+  if (req.user) {
+    res.send(gameLogic.getTimer(req.query.key));
+  }
+});
+
 router.post("/spawn", (req, res) => {
   if (req.user) {
     console.log("req.user equaled true in router.post(/spawn...");

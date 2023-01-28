@@ -22,7 +22,7 @@ const createLobby = (user, lobbyKey) => {
     lobbyKey: lobbyKey,
     players: {},
     gameInfo: {
-      startTime: 1000,
+      startTime: { hours: 0, minutes: 10, seconds: 0 },
       hotAndCold: false,
     },
     gameState: {
@@ -172,7 +172,12 @@ const gameState = {
 };
 
 /* Time Logic */
-const updateTime = () => {};
+const setTimer = (key, time) => {
+  allLobbies[key].gameInfo.startTime = time;
+};
+const getTimer = (key) => {
+  return allLobbies[key].gameInfo.startTime;
+};
 
 /* Player Logic */
 const spawnPlayer = (id, startLocation) => {
@@ -240,4 +245,6 @@ module.exports = {
   calcDistance,
   checkGameWin,
   resetPlayerPosition,
+  setTimer,
+  getTimer,
 };

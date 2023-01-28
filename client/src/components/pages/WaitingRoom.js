@@ -13,6 +13,7 @@ const WaitingRoom = (props) => {
   const [didHostLeave, setDidHostLeave] = useState(false);
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
   const [hasGameStarted, setHasGameStarted] = useState(false);
+  const [timer, setTimer] = useState({ hours: 0, minutes: 0, seconds: 30 });
 
   // Gets Lobby Key //
   useEffect(() => {
@@ -84,6 +85,9 @@ const WaitingRoom = (props) => {
       setDidHostLeave(true);
     };
     const callback4 = (response) => {
+      get("/api/getTimer", gameKey).then((time) => {
+        setTimer(time);
+      });
       setHasGameStarted(true);
     };
     const callback5 = (response) => {
@@ -126,6 +130,9 @@ const WaitingRoom = (props) => {
   };
 
   const startGame = () => {
+    get("/api/getTimer", gameKey).then((time) => {
+      setTimer(time);
+    });
     post("/api/startGame", gameKey);
     setHasGameStarted(true);
   };
@@ -138,7 +145,6 @@ const WaitingRoom = (props) => {
       <button onClick={handleLeaveLobby}>
         <Link to="/lobby"> Quit... </Link>
       </button>
-
       <div className="player-text">Player 1</div>
       <div className="body-container">Name: {player1.name}</div>
       <div className="body-container">Statistics</div>
@@ -148,6 +154,29 @@ const WaitingRoom = (props) => {
 
   const htmlRightBar = (
     <span className="right-Bar">
+      <div id="timeControlContainer">
+        <button
+          onClick={() => {
+            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 0, seconds: 30 });
+          }}
+        >
+          30 seconds
+        </button>
+        <button
+          onClick={() => {
+            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 2, seconds: 0 });
+          }}
+        >
+          2 minutes
+        </button>
+        <button
+          onClick={() => {
+            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 5, seconds: 0 });
+          }}
+        >
+          5 minutes
+        </button>
+      </div>
       <div className="player-text">Player 2</div>
       <div className="body-container">Name: {player2.name}</div>
       <div className="body-container">Statistics</div>
@@ -190,7 +219,7 @@ const WaitingRoom = (props) => {
         {htmlRightBar}
       </div>
     ) : (
-      <Game gameKey={gameKey} isHost={isHost} />
+      <Game gameKey={gameKey} isHost={isHost} timer={timer} />
     )
   ) : (
     htmlHostLeftScreen // Host Left

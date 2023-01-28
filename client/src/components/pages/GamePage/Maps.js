@@ -59,9 +59,12 @@ function Maps(props) {
   const [map, setMap] = useState(null);
   const [panorama, setPanorama] = useState(null);
   const [markers, setMarkers] = useState({});
+  // Dynamic States //
   const [insidePano, setInsidePano] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
+  // Important Constants
+  const hoursMinSecs = props.timer;
 
   // GETS WIN CONDITION //
   useEffect(() => {
@@ -120,8 +123,6 @@ function Maps(props) {
     post("/api/resetToWaitingRoom", props.gameKey);
   };
 
-  const hoursMinSecs = { hours: 0, minutes: 0, seconds: 15 };
-
   // Component Function Handlers //
   const panoOnChangePositionHandler = () => {
     // Updates Position //
@@ -148,12 +149,16 @@ function Maps(props) {
   };
   // only for player 2 (not host)
   useEffect(() => {
+    const callback = (startLocation) => {
+      setSpawnPlayer2(true);
+      setPlayer2Start(startLocation);
+    };
     if (!props.isHost) {
-      socket.on("spawnPlayer2", (startLocation) => {
-        setSpawnPlayer2(true);
-        setPlayer2Start(startLocation);
-      });
+      socket.on("spawnPlayer2", callback);
     }
+    return () => {
+      socket.off("spawnPlayer2", callback);
+    };
   }, []);
 
   // will set player 2's position once received from socket
@@ -250,11 +255,33 @@ function Maps(props) {
         })}
       </GoogleMap>
       {insidePano ? (
-        <div className="Timer-Container">
-          <CountDownTimer hoursMinSecs={hoursMinSecs} setGameLost={setGameLost}></CountDownTimer>
-        </div>
+        // Working Timer inside the Panoramic
+        <>
+          <button onClick={handleResetGame} id="Pano-GiveUp">
+            Give Up
+          </button>
+          <div className="Pano-Timer">
+            <CountDownTimer hoursMinSecs={hoursMinSecs} setGameLost={setGameLost}></CountDownTimer>
+          </div>
+        </>
       ) : (
-        <span></span>
+        <>
+          <h2 id="Map-Heading"> PICK A LOCATION </h2>
+
+          <button id="Map-BackButton" onClick={handleResetGame}>
+            &#x2191; Back
+          </button>
+
+          {/* Static Time Display on Map*/}
+          <div className="Map-Timer">
+            <h3> Timer </h3>
+            <p>
+              {props.timer.hours >= 10 ? props.timer.hours : "0" + String(props.timer.hours)}:
+              {props.timer.minutes >= 10 ? props.timer.minutes : "0" + String(props.timer.minutes)}:
+              {props.timer.seconds >= 10 ? props.timer.seconds : "0" + String(props.timer.seconds)}
+            </p>
+          </div>
+        </>
       )}
 
       {gameWon ? (
