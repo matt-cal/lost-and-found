@@ -101,7 +101,6 @@ const startRunningGame = (key, user1Id, user2Id) => {
   const player1Socket = getSocketFromUserID(user1Id);
   const player2Socket = getSocketFromUserID(user2Id);
   const intervalId = setInterval(() => {
-    console.log("Running Game...");
     const hasWon = gameLogic.checkGameWin(key, user1Id, user2Id);
     player1Socket.emit("hasWon", hasWon);
     player2Socket.emit("hasWon", hasWon);

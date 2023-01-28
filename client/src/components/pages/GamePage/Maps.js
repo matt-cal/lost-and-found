@@ -8,7 +8,7 @@ import { Link } from "@reach/router";
 
 const containerStyle = {
   width: "100%",
-  height: "650px",
+  height: "100%",
 };
 
 const center = {
@@ -29,7 +29,7 @@ const markerCoordinates = [
     position: { lat: 42.345573, lng: -71.098326 },
     startPositions: [
       { lat: 42.345573, lng: -71.098326 }, // Fenway area
-      { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common
+      { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Commons
       { lat: 42.360126338885586, lng: -71.05587522572742 }, // Quincy Market
     ],
   },
@@ -61,6 +61,7 @@ function Maps(props) {
   const [markers, setMarkers] = useState({});
   const [insidePano, setInsidePano] = useState(false);
   const [gameWon, setGameWon] = useState(false);
+  const [gameLost, setGameLost] = useState(false);
 
   // GETS WIN CONDITION //
   useEffect(() => {
@@ -115,10 +116,11 @@ function Maps(props) {
   // Ensures Game is Rest if Chosen to Play Agiain //
   const handleResetGame = () => {
     setGameWon(false);
+    setGameLost(false);
     post("/api/resetToWaitingRoom", props.gameKey);
   };
 
-  const hoursMinSecs = { hours: 0, minutes: 5, seconds: 59 };
+  const hoursMinSecs = { hours: 0, minutes: 0, seconds: 15 };
 
   // Component Function Handlers //
   const panoOnChangePositionHandler = () => {
@@ -163,40 +165,9 @@ function Maps(props) {
     }
   }, [player2Start]);
 
-  const CountDownTimer = ({ hoursMinSecs }) => {
-    const { hours = 0, minutes = 0, seconds = 60 } = hoursMinSecs;
-    const [[hrs, mins, secs], setTime] = React.useState([hours, minutes, seconds]);
-
-    const tick = () => {
-      if (hrs === 0 && mins === 0 && secs === 0) reset();
-      else if (mins === 0 && secs === 0) {
-        setTime([hrs - 1, 59, 59]);
-      } else if (secs === 0) {
-        setTime([hrs, mins - 1, 59]);
-      } else {
-        setTime([hrs, mins, secs - 1]);
-      }
-    };
-
-    const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
-
-    React.useEffect(() => {
-      const timerId = setInterval(() => tick(), 1000);
-      return () => clearInterval(timerId);
-    });
-
-    return (
-      <div>
-        <p>{`${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs
-          .toString()
-          .padStart(2, "0")}`}</p>
-      </div>
-    );
-  };
-
   // initially loaded for both players
   return isLoaded ? (
-    <>
+    <div id="map-container">
       <GoogleMap
         className="Map-Container"
         mapContainerStyle={containerStyle}
@@ -278,11 +249,16 @@ function Maps(props) {
           );
         })}
       </GoogleMap>
-      <div className="Timer-Container">
-        <CountDownTimer hoursMinSecs={hoursMinSecs}></CountDownTimer>
-      </div>
+      {insidePano ? (
+        <div className="Timer-Container">
+          <CountDownTimer hoursMinSecs={hoursMinSecs} setGameLost={setGameLost}></CountDownTimer>
+        </div>
+      ) : (
+        <span></span>
+      )}
+
       {gameWon ? (
-        <div id="winScreenContainer">
+        <div id="winScreenContainer" className="gameOverPopup">
           <h2> You Found Each Other </h2>
           <button onClick={handleLeaveLobby}>
             <Link to="/lobby"> Quit to Host/Join Screen </Link>
@@ -290,9 +266,20 @@ function Maps(props) {
           <button onClick={handleResetGame}> Back to Waiting Room </button>
         </div>
       ) : (
-        <div> You have Not Won yet </div>
+        <></>
       )}
-    </>
+      {gameLost ? (
+        <div id="loseScreenContainer" className="gameOverPopup">
+          <h2> You Could not Find Each Other on Time :-/ </h2>
+          <button onClick={handleLeaveLobby}>
+            <Link to="/lobby"> Quit to Host/Join Screen </Link>
+          </button>
+          <button onClick={handleResetGame}> Back to Waiting Room </button>
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
   ) : (
     <></>
   );
