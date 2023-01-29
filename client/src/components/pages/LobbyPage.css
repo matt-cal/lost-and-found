@@ -74,10 +74,10 @@
   width: 300px;
   height: 200px;
   border-radius: 50px;
+  color: var(--offWhite);
 }
 
 .LobbyPage-username-display {
-  color: var(--offWhite);
   font-size: 24px;
   margin-top: -8px;
 }
@@ -91,4 +91,30 @@
   background-color: var(--offWhite);
   color: var(--darkBrown);
   border-radius: 10px;
+}
+
+.LobbyPage-key-text {
+  font-size: 24px;
+}
+
+.LobbyPage-key-input,
+.LobbyPage-key-submit {
+  height: 32px;
+  font-size: 24px;
+  width: 240px;
+  text-align: center;
+  background-color: var(--offWhite);
+  color: var(--darkBrown);
+  border-radius: 10px;
+}
+
+.LobbyPage-key-back {
+  font-size: 12px;
+  font-weight: 700;
+  height: 20px;
+  width: 60px;
+  text-align: center;
+  background-color: var(--offWhite);
+  color: var(--darkBrown);
+  border-radius: 5px;
 }

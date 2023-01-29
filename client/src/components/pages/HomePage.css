@@ -5,6 +5,7 @@
   background-image: url(../modules/Images/High-Resolution-World-Map.jpg);
   background-size: contain;
   background-repeat: no-repeat;
+  height: 800px;
 }
 
 .HomePage-title {
@@ -18,8 +19,8 @@
 
 .HomePage-content {
   background-color: rgba(245, 255, 241, 0.65);
-  padding: 48px;
-  height: 100vh;
+  padding-top: 48px;
+  height: 90vh;
   display: flex;
   justify-content: center;
 }
