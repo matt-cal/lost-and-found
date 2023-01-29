@@ -1,5 +1,6 @@
 let location; //Somehow get latLng Coordinates
 let time_setting;
+const User = require("./models/user");
 
 /*------------------ Lobby System-------------------  */
 const allLobbies = {};
@@ -34,11 +35,15 @@ const createLobby = (user, lobbyKey) => {
   console.log("Lobby ${lobbyKey} has been created");
   // Adding Host to Game
   lobby.players[user._id] = {
-    userName: user.username,
     isHost: true,
     position: { lat: null, lng: null },
   };
-  console.log("Player1 was added to Lobby ${lobbyKey} as Host");
+  // Get player username from database
+  // add username to lobby
+  User.findOne({ name: user.name }).then((data) => {
+    lobby.players[user._id].userName = data.username;
+  });
+  console.log(`Player1 was added to Lobby ${lobbyKey} as Host`);
   // Add Lobby to allLobbies queue
   allLobbies[lobbyKey] = lobby;
   return lobby;
@@ -52,11 +57,15 @@ const joinLobby = (user, key) => {
   }
   // Adds Player2 to Lobby
   allLobbies[key].players[user._id] = {
-    userName: user.username,
     isHost: false,
     position: { lat: null, lng: null },
   };
-  console.log("Player2 was added to Lobby ${key} as host");
+  // Get player username from database
+  // add username to lobby
+  User.findOne({ name: user.name }).then((data) => {
+    allLobbies[key].players[user._id].userName = data.username;
+  });
+  console.log(`Player2 was added to Lobby ${key} as host`);
   return hostID;
 };
 
