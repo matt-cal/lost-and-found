@@ -55,6 +55,12 @@ const markerCoordinates = [
       { lat: 34.101758695296375, lng: -118.34026733124281 }, // HollyWood Boulevard
     ],
   },
+  {
+    label: "Toronto",
+    startPositions: [{lat: 43.6951476948252, lng: -79.45259465757317}, 
+    ]
+
+  }
 ];
 
 // PROPS

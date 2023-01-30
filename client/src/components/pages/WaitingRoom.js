@@ -170,8 +170,8 @@ const WaitingRoom = (props) => {
 
   return !didHostLeave ? (
     !hasGameStarted ? (
-      <Container className="vh-100 WaitingRoom-container" fluid={"true"}>
-        <Row className="align-items-center top-padding" fluid={"true"}>
+      <Container className="vh-100 WaitingRoom-container" fluid={"'true'"}>
+        <Row className="align-items-center top-padding" fluid={"'true'"}>
           <Col className="u-textCenter">
             <button className="buttons" onClick={handleLeaveLobby}>
               Quit...
@@ -210,48 +210,54 @@ const WaitingRoom = (props) => {
           </Col>
         </Row>
 
-        <Row className="player-padding" fluid={true}>
-          <Col className="u-textCenter align-items-center">
-            <div className="player-text"> Player 1 </div>
-          </Col>
-          <Col xs={5} className="u-textCenter"></Col>
-          <Col className="u-textCenter">
-            <div className="player-text">Player 2</div>
-          </Col>
-        </Row>
 
-        <Row className="player-padding">
-          <Col className="u-textCenter player-text">
-            <div className="body-container"> Name: {player1.name}</div>
-            <div className="body-container">Statistics</div>
-          </Col>
-          <Col xs={5} className="u-textCenter"></Col>
-          <Col className="u-textCenter player-text">
-            <div className="body-container">Name: {player2.name}</div>
-            <div className="body-container">Statistics</div>
-          </Col>
-        </Row>
-        <Row className="align-items-center description-container">
-          <Col></Col>
-          <Col xs={5}>
-            {isPlayer2Here
-              ? isHost
-                ? htmlActiveStartButton // If Player2 is here and you are Host
-                : htmleDisbaledStartActive // If player2 is Here but you are not host
-              : htmlDisplayNothing}
-          </Col>
-          <Col></Col>
-        </Row>
 
-        <Row className="description-padding">
-          <Col> </Col>
-          <Col xs={5} className="align-items-center description-container">
-            {" "}
-            Challenge your knowledge of a city and see if you can find each other!
-          </Col>
-          <Col></Col>
-        </Row>
-      </Container>
+
+      <Row className="player-padding" fluid = {true}>
+      <Col className="u-textCenter align-items-center">
+      <div className="player-text"> Player 1 </div>
+    </Col>
+        <Col xs={5} className="u-textCenter">
+        </Col>
+      <Col className="u-textCenter">
+      <div className="player-text">Player 2</div>
+    </Col>
+    </Row>
+
+
+
+
+    <Row className ="player-padding">
+      <Col className="u-textCenter player-text">
+      <div className="body-container"> Name: {player1.name}</div>
+      <div className="body-container">Statistics</div>
+      </Col>
+      <Col xs={5} className="u-textCenter">
+        </Col>
+        <Col className="u-textCenter player-text"> 
+        <div className="body-container">Name: {player2.name}</div>
+        <div className="body-container">Statistics</div>
+        </Col>
+    </Row>
+    <Row className="align-items-center row-container">
+    <Col></Col>
+    <Col xs= {5} className = "start-container">{isPlayer2Here
+          ? isHost
+            ? htmlActiveStartButton // If Player2 is here and you are Host
+            : htmleDisbaledStartActive // If player2 is Here but you are not host
+          : htmlDisplayNothing}
+    </Col>
+    <Col></Col>
+    </Row>
+    
+    
+    <Row className="align-items-center row-container">
+    <Col> </Col>
+    <Col xs= {5} className="align-items-center description-container" > Challenge your knowledge of a city and see if you can find each other!</Col>
+    <Col></Col>
+    </Row>
+    </Container>
+
     ) : (
       <Game gameKey={gameKey} isHost={isHost} timer={timer} />
     )
