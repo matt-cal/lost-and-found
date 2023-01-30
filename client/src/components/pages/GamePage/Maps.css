@@ -1,3 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+ 
+/* FOEAD2
+DDE5B6
+ADC178
+A98467
+6C584C
+2c2e41*/
 
 #map-container {
   width: 100%;
@@ -5,67 +15,170 @@
   position: relative;
 }
 
-.gameOverPopup {
+#Map-Banner {
   position: absolute;
-  left: 20px;
-  top: 20px;
-  background-color: white;
-  z-index: 99;
+  top: 0px;
+  background-color: #2c2e41;
+  z-index: 97;
+  text-align: center;
+  padding: 15px;
+  color: white;
+  width: 100%;
+  text-align: center;
+}
+ #Map-Title {
+  text-align: center;
+  font-size: 20pt;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+ }
+
+#Map-Timer{
+  float: right;
+  color: #2c2e41;
+  border-radius: 30px;
+  background-color:white ;
+  margin: 0px auto;
+  border: black 3px;
+  border: 3px solid black;
+  font-weight: bold;
+}
+#Map-Timer p {
+  margin: 3px 5px;
+}
+
+#Map-GiveUp {
+  float: left;
+  color: #2c2e41;
+  border-radius: 30px;
+  background-color:white ;
+  margin: auto;
+  border: 3px solid black;
+  padding: 5px;
+  font-weight: bold;
+}
+
+#Map-Instructions {
+  position: absolute;
+  top: 75px;
+  right: 5px;
+  text-align: center;
+  color:white;
+  background-color: #2c2e41;;
+  padding: 15px;
   border-radius: 30px;
 }
 
-.Pano-Timer{
+
+/*******************  Panoramic Styling *********************/
+#Pano-Banner {
   position: absolute;
-  top: 20px;
-  right:20px; 
-  background-color: white;
-  height: 50px;
-  width: 75px;
-  z-index: 99;
+  top: 0px;
+  background-color: #2c2e41;
+  z-index: 97;
   text-align: center;
-  border-radius: 15px;
+  padding: 15px;
+  color: white;
+  width: 100%;
+  text-align: center;
+}
+ #Pano-Title {
+  text-align: center;
+  font-size: 20pt;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+ }
+
+#Pano-Timer{
+  float: right;
+  color: #2c2e41;
+  border-radius: 30px;
+  background-color:white ;
+  margin: 0px auto;
+  border: black 3px;
+  border: 3px solid black;
+  font-weight: bold;
+}
+#Pano-Timer p {
+  margin: 3px 5px;
 }
 
 #Pano-GiveUp {
+  float: left;
+  color: #2c2e41;
+  border-radius: 30px;
+  background-color:white ;
+  margin: auto;
+  border: 3px solid black;
+  padding: 5px;
+  font-weight: bold;
+}
+
+#hotAndCold {
   position: absolute;
-  top: 20px;
+  bottom: 20px;
   left:20px; 
-  background-color: white;
+  background-color: #2c2e41;
   z-index: 99;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 30px;
+  padding: 5px;
+  color: white;
+  padding: 15px;
+  border: 3px solid  white ;
 }
-
-.Map-Timer {
-  position: absolute;
-  top: 20px;
-  right:20px; 
-  background-color: white;
+/****************** WIN/LOSEMODAL THINGS ******************/
+.gameOverPopUp {
+  width: 500px; 
+  height: 350px;
+  display: block;
+  position:absolute;
+  top:0;
+  left: 0;
+  right:0;
+  bottom: 0;
+  margin:auto;
   z-index: 99;
-  text-align: center;
-  border-radius: 15px;
-  padding: 5px;
+  background-color: white;
+  border-radius: 30px;
+  padding: 10px;
+  text-decoration:none
 }
 
-#Map-Heading {
-  position: absolute;
-  top: 20px;
-  background-color: white;
-  z-index: 98;
-  text-align: center;
-  border-radius: 15px;
-  padding: 5px;
-  width: 100%;
+.gameOverPopUp .col {
+  display: flex;
+  background-color: #2c2e41;
+  justify-content: center;
 }
 
-#Map-BackButton {
-  position: absolute;
-  top: 20px;
-  left:20px; 
-  background-color: white;
-  z-index: 99;
+.gameOverPopUp .row1 .col  {
+  border-radius: 30px 30px 0 0; 
+  color: rgb(245, 245, 15);
+  font-size: 20pt;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   text-align: center;
-  border-radius: 15px;
-  padding: 5px;
+  font-style: italic;
+}
+.gameOverPopUp .row2 .col  {
+  border-top: white 10px;
+  border-bottom: white 10px;
+}
 
+.gameOverPopUp .row3 .col {
+  border-radius: 0 0 30px 30px;
+}
+
+.gameOverPopUp .row3 .col button {
+  margin-bottom: 20px;
+}
+
+.gameOverPopUp button {
+  background-color:#2c2e41;
+  border-radius: 30px;
+  padding: 15px 60px;
+  color:white;
+  font-size: 16pt;
+  margin: 10px 0;
 }

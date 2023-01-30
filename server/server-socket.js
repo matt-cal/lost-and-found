@@ -97,14 +97,16 @@ const startGame = (user, key) => {
 
 /** Start running game: game loop emits game states to all clients at 60 frames per second */
 const startRunningGame = (key, user1Id, user2Id) => {
-  console.log("Game has started");
   const player1Socket = getSocketFromUserID(user1Id);
   const player2Socket = getSocketFromUserID(user2Id);
+  console.log("Game is Running...");
   const intervalId = setInterval(() => {
     const hasWon = gameLogic.checkGameWin(key, user1Id, user2Id);
-    player1Socket.emit("hasWon", hasWon);
-    player2Socket.emit("hasWon", hasWon);
-  }, 1000 / 60); // 60 frames per second
+    const distanceFromEachOther = gameLogic.getDistanceFromEachOther(key, user1Id, user2Id);
+    const gameUpdate = [hasWon, distanceFromEachOther];
+    player1Socket.emit("gameUpdate", gameUpdate);
+    player2Socket.emit("gameUpdate", gameUpdate);
+  }, 1000 / 20); // 60 frames per second
   lobbyToGameIntervalId[key] = intervalId;
 };
 const resetToWaitingRoom = (user, key) => {

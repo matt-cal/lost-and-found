@@ -126,6 +126,7 @@ const startGame = (user, key) => {
   return player2Id;
 };
 /*------------------ End of Lobby System-------------------  */
+const MAXDISTNEEDEDTOWIN = 0.5;
 const resetPlayerPosition = (id, key) => {
   let otherPlayerId;
   const lobby = allLobbies[key];
@@ -137,6 +138,13 @@ const resetPlayerPosition = (id, key) => {
 
   allLobbies[key].players[id].position = { lat: null, lng: null };
   return otherPlayerId;
+};
+
+const getDistanceFromEachOther = (key, id1, id2) => {
+  const lobby = allLobbies[key];
+  const position1 = lobby.players[id1].position;
+  const position2 = lobby.players[id2].position;
+  return calcDistance(position1, position2);
 };
 // calculate distance in miles between two locations (lat/lng objects)
 const calcDistance = (location1, location2) => {
@@ -203,13 +211,13 @@ const updatePlayerPosition = (key, id, newCoords) => {
 
 const checkGameWin = (key, id1, id2) => {
   const lobby = allLobbies[key];
+  const distanceFromEachOther = getDistanceFromEachOther(key, id1, id2);
   if (
     (lobby.players[id1].position.lat != null) &
     (lobby.players[id1].position.lng != null) &
     (lobby.players[id2].position.lat != null) &
     (lobby.players[id2].position.lng != null) &
-    (lobby.players[id1].position.lat === lobby.players[id2].position.lat) &
-    (lobby.players[id1].position.lng === lobby.players[id2].position.lng)
+    (distanceFromEachOther <= MAXDISTNEEDEDTOWIN)
   ) {
     return true;
   } else {
@@ -247,4 +255,5 @@ module.exports = {
   resetPlayerPosition,
   setTimer,
   getTimer,
+  getDistanceFromEachOther,
 };

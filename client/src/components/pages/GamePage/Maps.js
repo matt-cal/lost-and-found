@@ -5,7 +5,11 @@ import CountDownTimer from "../../modules/Timer";
 import "./Maps.css";
 import { socket } from "../../../client-socket.js";
 import { Link } from "@reach/router";
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
 const containerStyle = {
   width: "100%",
   height: "100%",
@@ -36,12 +40,20 @@ const markerCoordinates = [
   {
     label: "NewYorkCity",
     position: { lat: 40.75497751666591, lng: -73.98997420018596 },
-    startPositions: [{ lat: 40.75497751666591, lng: -73.98997420018596 }],
+    startPositions: [
+      { lat: 40.75497751666591, lng: -73.98997420018596 },
+      { lat: 40.758178849300116, lng: -73.98558608871517 }, // Times Square
+      { lat: 40.758461553906756, lng: -73.97915694453665 }, // Rockefeller Center
+      { lat: 40.750225095780856, lng: -73.99467693104403 }, // Madison Square Garden
+    ],
   },
   {
     label: "LosAngeles",
     position: { lat: 34.01820940007115, lng: -118.2999255824083 },
-    startPositions: [{ lat: 34.01820940007115, lng: -118.2999255824083 }],
+    startPositions: [
+      { lat: 34.01820940007115, lng: -118.2999255824083 },
+      { lat: 34.101758695296375, lng: -118.34026733124281 }, // HollyWood Boulevard
+    ],
   },
 ];
 
@@ -63,19 +75,24 @@ function Maps(props) {
   const [insidePano, setInsidePano] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
+  const [distanceApart, setDistanceApart] = useState(-999999);
   // Important Constants
   const hoursMinSecs = props.timer;
 
   // GETS WIN CONDITION //
   useEffect(() => {
-    const callback1 = (hasWon) => {
+    const callback1 = (gameUpdate) => {
+      const hasWon = gameUpdate[0];
+      const distance = gameUpdate[1];
       if (hasWon) {
         setGameWon(true);
       }
+      console.log("DISTANCE", distance);
+      setDistanceApart(distance);
     };
-    socket.on("hasWon", callback1);
+    socket.on("gameUpdate", callback1);
     return () => {
-      socket.off("hasWon", callback1);
+      socket.off("gameUpdate", callback1);
     };
   }, []);
 
@@ -172,7 +189,7 @@ function Maps(props) {
 
   // initially loaded for both players
   return isLoaded ? (
-    <div id="map-container">
+    <div id="map-container" className="border-rose-500">
       <GoogleMap
         className="Map-Container"
         mapContainerStyle={containerStyle}
@@ -257,52 +274,99 @@ function Maps(props) {
       {insidePano ? (
         // Working Timer inside the Panoramic
         <>
-          <button onClick={handleResetGame} id="Pano-GiveUp">
-            Give Up
-          </button>
-          <div className="Pano-Timer">
-            <CountDownTimer hoursMinSecs={hoursMinSecs} setGameLost={setGameLost}></CountDownTimer>
+          <div id="Pano-Banner">
+            <span id="Pano-Title"> Lost&Found </span>
+            <button onClick={handleResetGame} id="Pano-GiveUp">
+              Give Up
+            </button>
+            <div id="Pano-Timer">
+              <CountDownTimer
+                hoursMinSecs={hoursMinSecs}
+                setGameLost={setGameLost}
+              ></CountDownTimer>
+            </div>
           </div>
+          <div id="hotAndCold"> About {distanceApart.toFixed(1)} Miles Apart </div>
         </>
       ) : (
         <>
-          <h2 id="Map-Heading"> PICK A LOCATION </h2>
-
-          <button id="Map-BackButton" onClick={handleResetGame}>
-            &#x2191; Back
-          </button>
-
-          {/* Static Time Display on Map*/}
-          <div className="Map-Timer">
-            <h3> Timer </h3>
-            <p>
-              {props.timer.hours >= 10 ? props.timer.hours : "0" + String(props.timer.hours)}:
-              {props.timer.minutes >= 10 ? props.timer.minutes : "0" + String(props.timer.minutes)}:
-              {props.timer.seconds >= 10 ? props.timer.seconds : "0" + String(props.timer.seconds)}
-            </p>
+          <div id="Map-Banner">
+            <span id="Map-Title"> Choose a Location </span>
+            <button onClick={handleResetGame} id="Map-GiveUp">
+              &#x2191; Back
+            </button>
+            <div id="Map-Timer">
+              <p>
+                {props.timer.hours >= 10 ? props.timer.hours : "0" + String(props.timer.hours)}:
+                {props.timer.minutes >= 10
+                  ? props.timer.minutes
+                  : "0" + String(props.timer.minutes)}
+                :
+                {props.timer.seconds >= 10
+                  ? props.timer.seconds
+                  : "0" + String(props.timer.seconds)}
+              </p>
+            </div>
           </div>
+          <button
+            id="Map-Instructions"
+            onClick={() => {
+              window.alert("Double-Click on a Marker to Choose a Location");
+            }}
+          >
+            ?
+          </button>
         </>
       )}
-
       {gameWon ? (
-        <div id="winScreenContainer" className="gameOverPopup">
-          <h2> You Found Each Other </h2>
-          <button onClick={handleLeaveLobby}>
-            <Link to="/lobby"> Quit to Host/Join Screen </Link>
-          </button>
-          <button onClick={handleResetGame}> Back to Waiting Room </button>
-        </div>
+        <Container id="Win-Modal" className="gameOverPopUp">
+          <Row className="row1">
+            <Col className="col">
+              <h2> You Found Each Other! </h2>
+              <hr />
+            </Col>
+          </Row>
+          <Row className="row2">
+            <Col className="col">
+              <button onClick={handleLeaveLobby}>
+                <Link to="/lobby" style={{ textDecoration: "none", color: "white" }}>
+                  Quit Lobby
+                </Link>
+              </button>
+            </Col>
+          </Row>
+          <Row className="row3">
+            <Col className="col">
+              <button onClick={handleResetGame}> Play Again </button>
+            </Col>
+          </Row>
+        </Container>
       ) : (
         <></>
       )}
       {gameLost ? (
-        <div id="loseScreenContainer" className="gameOverPopup">
-          <h2> You Could not Find Each Other on Time :-/ </h2>
-          <button onClick={handleLeaveLobby}>
-            <Link to="/lobby"> Quit to Host/Join Screen </Link>
-          </button>
-          <button onClick={handleResetGame}> Back to Waiting Room </button>
-        </div>
+        <Container id="Lose-Modal" className="gameOverPopUp">
+          <Row className="row1">
+            <Col className="col">
+              <h2> You Could Not Find Each Other </h2>
+              <hr />
+            </Col>
+          </Row>
+          <Row className="row2">
+            <Col className="col">
+              <button onClick={handleLeaveLobby}>
+                <Link to="/lobby" style={{ textDecoration: "none", color: "white" }}>
+                  Quit Lobby
+                </Link>
+              </button>
+            </Col>
+          </Row>
+          <Row className="row3">
+            <Col className="col">
+              <button onClick={handleResetGame}> Play Again </button>
+            </Col>
+          </Row>
+        </Container>
       ) : (
         <></>
       )}
