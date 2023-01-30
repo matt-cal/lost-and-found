@@ -6,6 +6,7 @@ import "./Maps.css";
 import { socket } from "../../../client-socket.js";
 import { Link } from "@reach/router";
 
+
 const containerStyle = {
   width: "100%",
   height: "100%",

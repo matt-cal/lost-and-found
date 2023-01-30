@@ -81,7 +81,7 @@ const LobbyPage = (props) => {
         }}
         className="LobbyPage-key-submit"
       >
-        Submit
+        Submit 
       </button>
       <button
         onClick={() => {

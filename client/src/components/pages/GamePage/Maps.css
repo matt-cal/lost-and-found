@@ -50,12 +50,12 @@
 #Map-Heading {
   position: absolute;
   top: 20px;
-  background-color: white;
-  z-index: 98;
+  background-color: #2c2e41;
   text-align: center;
-  border-radius: 15px;
   padding: 5px;
   width: 100%;
+  color: white;
+  font-size: 30px;
 }
 
 #Map-BackButton {
