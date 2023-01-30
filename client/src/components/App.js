@@ -46,7 +46,6 @@ const App = () => {
 
   return (
     <>
-      <div>
         <Router>
           <HomePage
             path="/"
@@ -59,7 +58,6 @@ const App = () => {
           <Game path="/Game" userId={userId}/>
           <NotFound default />
         </Router>
-      </div>
     </>
   );
 };
