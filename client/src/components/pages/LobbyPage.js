@@ -97,7 +97,12 @@ const LobbyPage = (props) => {
   return (
     <>
       <nav className="main-container">
-        <div className="lobby-title">Lost & Found</div>
+        <div className="lobby-title">
+          <div>Lost & Found</div>
+          <Link to="/" className="LobbyPage-quit">
+            Quit
+          </Link>
+        </div>
         <div className="LobbyPage-content">
           <div className="Host-Container u-flex-alignCenter u-flexColumn">
             <button

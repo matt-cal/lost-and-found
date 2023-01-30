@@ -23,6 +23,20 @@
   font-size: 40px;
   background-color: #dde5b6;
   color: #6c584c;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.LobbyPage-quit {
+  height: 32px;
+  font-size: 24px;
+  width: 100px;
+  text-align: center;
+  background-color: var(--darkBrown);
+  color: var(--offWhite);
+  border-radius: 10px;
+  text-decoration: none;
 }
 
 .Host-Button {
