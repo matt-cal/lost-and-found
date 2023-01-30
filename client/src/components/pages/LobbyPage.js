@@ -71,9 +71,11 @@ const LobbyPage = (props) => {
       <button
         onClick={() => {
           post("/api/isValidKey", { key: inputedKey }).then((response) => {
-            if (response) {
+            if (response.res === "VALID") {
               post("/api/joinLobby", { userid: props.userId, enteredKey: inputedKey });
               navigate("/waitingroom");
+            } else if (response.res === "FULL") {
+              window.alert("The Lobby is Full");
             } else {
               window.alert("That is not a Valid Key");
             }
@@ -102,7 +104,6 @@ const LobbyPage = (props) => {
           <button
             className="Host-Button"
             onClick={() => {
-              console.log("In onClick in Host Game Button");
               post("/api/createLobby", { userid: props.userId });
             }}
           >

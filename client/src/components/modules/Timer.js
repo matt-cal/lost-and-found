@@ -8,6 +8,7 @@ const CountDownTimer = (props) => {
     if (hrs === 0 && mins === 0 && secs === 0) {
       //reset()
       console.log("TimeRanOut");
+      props.panorama.setOptions({ disableDefaultUI: true, clickToGo: false });
       props.setGameLost(true);
     } else if (mins === 0 && secs === 0) {
       setTime([hrs - 1, 59, 59]);
@@ -21,7 +22,11 @@ const CountDownTimer = (props) => {
   const reset = () => setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
 
   React.useEffect(() => {
-    const timerId = setInterval(() => tick(), 1000);
+    const timerId = setInterval(() => {
+      if (!props.stopTimer) {
+        tick();
+      }
+    }, 1000);
     return () => clearInterval(timerId);
   });
 

@@ -4,7 +4,7 @@ import { get, post } from "../../utilities.js";
 import { socket } from "../../client-socket.js";
 import { Link, useNavigate } from "@reach/router";
 import Game from "./GamePage/Game";
-import Container from "react-bootstrap/Container"; 
+import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
@@ -17,6 +17,7 @@ const WaitingRoom = (props) => {
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [timer, setTimer] = useState({ hours: 0, minutes: 0, seconds: 30 });
+  const navigate = useNavigate();
 
   // Gets Lobby Key //
   useEffect(() => {
@@ -130,6 +131,7 @@ const WaitingRoom = (props) => {
     } else {
       post("/api/deletePlayer2", gameKey);
     }
+    navigate("/lobby");
   };
 
   const startGame = () => {
@@ -143,48 +145,6 @@ const WaitingRoom = (props) => {
   /****************** <HTML/>  ********************/
   const htmlDisplayNothing = <span> </span>;
 
-  const htmlLeftBar = (
-    <Col>
-      <button onClick={handleLeaveLobby}>
-        <Link to="/lobby"> Quit... </Link>
-      </button>
-      <div className="player-text">Player 1</div>
-      <div className="body-container">Name: {player1.name}</div>
-      <div className="body-container">Statistics</div>
-    </Col>
-  );
-
-  const htmlRightBar = (
-    <Col className="u-textCenter">
-      <div id="timeControlContainer">
-        <button
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 0, seconds: 30 });
-          }}
-        >
-          30 seconds
-        </button>
-        <button
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 2, seconds: 0 });
-          }}
-        >
-          2 minutes
-        </button>
-        <button
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 5, seconds: 0 });
-          }}
-        >
-          5 minutes
-        </button>
-      </div>
-      <div className="player-text">Player 2</div>
-      <div className="body-container">Name: {player2.name}</div>
-      <div className="body-container">Statistics</div>
-    </Col>
-  );
-
   const htmlActiveStartButton = (
     <span>
       <button className="start-button" onClick={startGame}>
@@ -195,8 +155,8 @@ const WaitingRoom = (props) => {
 
   const htmleDisbaledStartActive = (
     <span>
-      <button className="start-button" disabled>
-        <div className="start-text">Start</div>
+      <button className="start-button-disabled" disabled>
+        <div className="start-text-disabled">Start</div>
       </button>
     </span>
   );
@@ -210,89 +170,88 @@ const WaitingRoom = (props) => {
 
   return !didHostLeave ? (
     !hasGameStarted ? (
-      <Container className="vh-100 WaitingRoom-container" fluid = {true}>
-      <Row className = "align-items-center top-padding" fluid = {true}>
-        <Col className="u-textCenter">
-        <button className = "buttons" onClick={handleLeaveLobby}>
-        <Link style = {{textDecoration:"none", color: "white"}} to="/lobby" > Quit... </Link>
-      </button>
-        </Col>
-        <Col xs = {5} className="u-textCenter gamepin-container"> Game Pin: {gameKey.key}
-        </Col>
-        <Col className="u-textCenter"> 
-        <div id="timeControlContainer">
-        <button className="buttons"
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 0, seconds: 30 });
-          }}
-        >
-          30 seconds
-        </button>
-        <button className="buttons"
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 2, seconds: 0 });
-          }}
-        >
-         2 minutes
-        </button>
-        <button className="buttons"
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 5, seconds: 0 });
-          }}
-        >
-          5 minutes
-        </button>
-      </div> </Col>
-      </Row>
+      <Container className="vh-100 WaitingRoom-container" fluid={"true"}>
+        <Row className="align-items-center top-padding" fluid={"true"}>
+          <Col className="u-textCenter">
+            <button className="buttons" onClick={handleLeaveLobby}>
+              Quit...
+            </button>
+          </Col>
+          <Col xs={5} className="u-textCenter gamepin-container">
+            Game Pin: {gameKey.key}
+          </Col>
+          <Col className="u-textCenter">
+            <div id="timeControlContainer">
+              <button
+                className="buttons"
+                onClick={() => {
+                  post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 0, seconds: 30 });
+                }}
+              >
+                30 seconds
+              </button>
+              <button
+                className="buttons"
+                onClick={() => {
+                  post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 2, seconds: 0 });
+                }}
+              >
+                2 minutes
+              </button>
+              <button
+                className="buttons"
+                onClick={() => {
+                  post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 5, seconds: 0 });
+                }}
+              >
+                5 minutes
+              </button>
+            </div>{" "}
+          </Col>
+        </Row>
 
+        <Row className="player-padding" fluid={true}>
+          <Col className="u-textCenter align-items-center">
+            <div className="player-text"> Player 1 </div>
+          </Col>
+          <Col xs={5} className="u-textCenter"></Col>
+          <Col className="u-textCenter">
+            <div className="player-text">Player 2</div>
+          </Col>
+        </Row>
 
+        <Row className="player-padding">
+          <Col className="u-textCenter player-text">
+            <div className="body-container"> Name: {player1.name}</div>
+            <div className="body-container">Statistics</div>
+          </Col>
+          <Col xs={5} className="u-textCenter"></Col>
+          <Col className="u-textCenter player-text">
+            <div className="body-container">Name: {player2.name}</div>
+            <div className="body-container">Statistics</div>
+          </Col>
+        </Row>
+        <Row className="align-items-center description-container">
+          <Col></Col>
+          <Col xs={5}>
+            {isPlayer2Here
+              ? isHost
+                ? htmlActiveStartButton // If Player2 is here and you are Host
+                : htmleDisbaledStartActive // If player2 is Here but you are not host
+              : htmlDisplayNothing}
+          </Col>
+          <Col></Col>
+        </Row>
 
-
-      <Row className="player-padding" fluid = {true}>
-      <Col className="u-textCenter align-items-center">
-      <div className="player-text"> Player 1 </div>
-    </Col>
-        <Col xs={5} className="u-textCenter">
-        </Col>
-      <Col className="u-textCenter">
-      <div className="player-text">Player 2</div>
-    </Col>
-    </Row>
-
-
-
-
-    <Row className ="player-padding">
-      <Col className="u-textCenter player-text">
-      <div className="body-container"> Name: {player1.name}</div>
-      <div className="body-container">Statistics</div>
-      </Col>
-      <Col xs={5} className="u-textCenter">
-        </Col>
-        <Col className="u-textCenter player-text"> 
-        <div className="body-container">Name: {player2.name}</div>
-        <div className="body-container">Statistics</div>
-        </Col>
-    </Row>
-    <Row className="align-items-center description-container">
-    <Col></Col>
-    <Col xs= {5}>{isPlayer2Here
-          ? isHost
-            ? htmlActiveStartButton // If Player2 is here and you are Host
-            : htmleDisbaledStartActive // If player2 is Here but you are not host
-          : htmlDisplayNothing}
-    </Col>
-    <Col></Col>
-    </Row>
-    
-    
-    <Row className = "description-padding">
-    <Col> </Col>
-    <Col xs= {5} className="align-items-center description-container" > Challenge your knowledge of a city and see if you can find each other!</Col>
-    <Col></Col>
-    </Row>
-    </Container>
-
+        <Row className="description-padding">
+          <Col> </Col>
+          <Col xs={5} className="align-items-center description-container">
+            {" "}
+            Challenge your knowledge of a city and see if you can find each other!
+          </Col>
+          <Col></Col>
+        </Row>
+      </Container>
     ) : (
       <Game gameKey={gameKey} isHost={isHost} timer={timer} />
     )

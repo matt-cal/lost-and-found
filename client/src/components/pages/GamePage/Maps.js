@@ -76,8 +76,12 @@ function Maps(props) {
   const [gameWon, setGameWon] = useState(false);
   const [gameLost, setGameLost] = useState(false);
   const [distanceApart, setDistanceApart] = useState(-999999);
+  const [stopTimer, setStopTimer] = useState(false);
   // Important Constants
   const hoursMinSecs = props.timer;
+  // Gets Random Start Position //
+  const [spawnPlayer2, setSpawnPlayer2] = useState(false);
+  const [player2Start, setPlayer2Start] = useState(null);
 
   // GETS WIN CONDITION //
   useEffect(() => {
@@ -85,20 +89,17 @@ function Maps(props) {
       const hasWon = gameUpdate[0];
       const distance = gameUpdate[1];
       if (hasWon) {
+        setStopTimer(true);
+        panorama.setOptions({ disableDefaultUI: true, clickToGo: false });
         setGameWon(true);
       }
-      console.log("DISTANCE", distance);
       setDistanceApart(distance);
     };
     socket.on("gameUpdate", callback1);
     return () => {
       socket.off("gameUpdate", callback1);
     };
-  }, []);
-
-  // Gets Random Start Position //
-  const [spawnPlayer2, setSpawnPlayer2] = useState(false);
-  const [player2Start, setPlayer2Start] = useState(null);
+  }, [insidePano]);
 
   const getRandomInt = (min, max) => {
     // The maximum is exclusive and the minimum is inclusive
@@ -152,15 +153,6 @@ function Maps(props) {
       post("/api/updatePosition", {
         newLocation: newLocation,
         key: props.gameKey.key,
-      });
-
-      // Can Remove This Post Request //
-      post("/api/calculateDistance", {
-        location1: { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Common hardcoded
-        location2: newLocation,
-        test: "test",
-      }).then((res) => {
-        console.log(res.distance);
       });
     }
   };
@@ -283,6 +275,8 @@ function Maps(props) {
               <CountDownTimer
                 hoursMinSecs={hoursMinSecs}
                 setGameLost={setGameLost}
+                panorama={panorama}
+                stopTimer={stopTimer}
               ></CountDownTimer>
             </div>
           </div>

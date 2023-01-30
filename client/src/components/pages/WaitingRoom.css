@@ -55,6 +55,13 @@
   filter: drop-shadow(2px 4px 2px #4e5e80);
   text-decoration: none;
 }
+.start-text-disabled {
+  font-size: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.763);
+  font-style: italic;
+}
+
 
 .start-button {
   background-color:rgb(44, 46, 65);
@@ -63,9 +70,18 @@
   filter: drop-shadow(4px 8px 4px #b1b1b1);
   text-decoration: none;
 }
-.start-button :disabled {
-  opacity: 0.3;
+
+
+.start-button-disabled {
+  background-color:rgb(44, 46, 65);
+  width: 220px;
+  height: 70px;
 }
+.start-button-disabled :disabled {
+  opacity: .8;
+}
+
+
 
 .gamepin-container{
   text-align: center;
