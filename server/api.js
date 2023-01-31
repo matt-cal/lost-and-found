@@ -174,7 +174,6 @@ router.get("/activeUsers", (req, res) => {
 /*----------------------- UserName System---------------------------------*/
 router.get("/getUsername", (req, res) => {
   User.findOne({ name: req.user.name }).then((user) => {
-    console.log(`found user: ${user.username}`);
     res.send({ username: user.username });
   });
 });
@@ -188,6 +187,32 @@ router.post("/changeUsername", (req, res) => {
   res.send({ message: "updated username" });
 });
 /*----------------------- End of UserName System---------------------------------*/
+
+// player statistics
+router.post("/updateGamesPlayed", (req, res) => {
+  gameLogic.updateGamesPlayed(req.body.key);
+});
+
+router.get("/getGamesPlayed", (req, res) => {
+  User.findOne({ googleid: req.user.googleid }).then((user) => {
+    res.send({ gamesPlayed: user.gamesPlayed });
+  });
+});
+
+router.get("/getOtherPlayerGamesPlayed", (req, res) => {
+  const username = req.query.userName;
+  User.findOne({ username: username }).then((user) => {
+    console.log("found other user: ", user);
+    res.send({ gamesPlayed: user.gamesPlayed });
+  });
+});
+
+router.post("/resetGamesPlayed", (req, res) => {
+  User.findOne({ googleid: req.user.googleid }).then((user) => {
+    user.gamesPlayed = 0;
+    user.save();
+  });
+});
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

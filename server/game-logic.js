@@ -71,7 +71,6 @@ const joinLobby = (user, key) => {
 
 const getHostStatus = (user, key) => {
   const lobby = allLobbies[key];
-  console.log("In getHostStatus...", lobby);
   return lobby.players[user._id].isHost;
 };
 
@@ -242,6 +241,20 @@ const resetWinState = () => {
   gameState.gameWon = null;
 };
 
+// player statistics
+const updateGamesPlayed = (key) => {
+  // increase games played by one for both players in lobby
+  const lobby = allLobbies[key];
+  for (const player in lobby.players) {
+    console.log("player: ", lobby.players[player].userName);
+    User.findOne({ username: lobby.players[player].userName }).then((user) => {
+      console.log(`found user ${user}`);
+      user.gamesPlayed += 1;
+      user.save();
+    });
+  }
+};
+
 module.exports = {
   gameState,
   spawnPlayer,
@@ -265,4 +278,5 @@ module.exports = {
   setTimer,
   getTimer,
   getDistanceFromEachOther,
+  updateGamesPlayed,
 };

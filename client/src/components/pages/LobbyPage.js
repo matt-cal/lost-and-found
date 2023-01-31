@@ -136,6 +136,13 @@ const LobbyPage = (props) => {
             <button className="LobbyPage-username-button" onClick={changeUsername}>
               Change Username
             </button>
+            <button
+              onClick={() => {
+                post("/api/resetGamesPlayed");
+              }}
+            >
+              Reset Stats
+            </button>
           </div>
         </div>
       </div>
