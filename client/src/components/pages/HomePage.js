@@ -37,21 +37,15 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
                 </button>
               </div>
             ) : (
-              <Row className="align-items-center HomePage-signin-container homepage-middle-signin">
-                <Col className="HomePage-signin-text">
-                  {" "}
-                  Log In
-                  <Row className="HomePage-signin-text align-items-center">
-                    <GoogleLogin
-                      className="homepage-middle-signup"
-                      onSuccess={handleLogin}
-                      onError={(err) => console.log(err)}
-                      theme="outline"
-                      shape="pill"
-                    />
-                  </Row>
-                </Col>
-              </Row>
+              <div className="HomePage-signin-container">
+                <div className="HomePage-signin-text">Log In</div>
+                <GoogleLogin
+                  onSuccess={handleLogin}
+                  onError={(err) => console.log(err)}
+                  theme="outline"
+                  shape="pill"
+                />
+              </div>
             )}
           </GoogleOAuthProvider>
         </Col>

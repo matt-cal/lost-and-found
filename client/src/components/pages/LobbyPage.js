@@ -5,6 +5,9 @@ import "../../utilities.css";
 import "./LobbyPage.css";
 import NotLoggedInPage from "./NotLoggedInPage";
 import { socket } from "../../client-socket.js";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const LobbyPage = (props) => {
   if (props.userId === undefined) {
@@ -46,17 +49,17 @@ const LobbyPage = (props) => {
     <div className="LobbyPage-username-container">
       <div className="LobbyPage-username-display">
         Username:
-        <div className="u-bold">{username}</div>
+        <div className="u-bold LobbyPage-name">{username}</div>
       </div>
       <input
         type="text"
         placeholder="New Username"
-        className="LobbyPage-username-input"
+        className="LobbyPage-username-input LobbyPage-username-button"
         name="message"
         onChange={handleChange}
         value={message}
       />
-      <button className="LobbyPage-username-button" onClick={changeUsername}>
+      <button className="LobbyPage-change-username-button" onClick={changeUsername}>
         Change Username
       </button>
     </div>
@@ -103,9 +106,15 @@ const LobbyPage = (props) => {
 
   return (
     <>
-      <div className="lobby-title">Lost & Found</div>
-      <div className="LobbyPage-content main-container">
-        <div className="Host-Container u-flex-alignCenter u-flexColumn">
+      <Container className = "vh-100 main-container" fluid = "true">
+      <Row className="align-items-center" fluid = "true">
+        <Col> </Col>
+        <Col xs = {12} className="lobby-title">Lost & Found</Col>
+        <Col></Col>
+      </Row>
+      <Row className="LobbyPage-content" fluid = "true">
+        <Col></Col>
+        <Col xs = {6} className="Host-Container u-flex-alignCenter">
           <button
             className="Host-Button"
             onClick={() => {
@@ -133,8 +142,10 @@ const LobbyPage = (props) => {
           >
             Reset Stats
           </button>
-        </div>
-      </div>
+        </Col>
+        <Col></Col>
+      </Row>
+      </Container>
     </>
   );
 };
