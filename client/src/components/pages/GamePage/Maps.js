@@ -314,7 +314,7 @@ function Maps(props) {
         className="Map-Container"
         mapContainerStyle={containerStyle}
         center={mapCenter}
-        zoom={2}
+        zoom={2.5}
         onLoad={(map) => {
           setMap(map);
         }}

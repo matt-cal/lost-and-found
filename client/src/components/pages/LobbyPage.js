@@ -106,45 +106,40 @@ const LobbyPage = (props) => {
 
   return (
     <>
-      <Container className = "vh-100 main-container" fluid = "true">
-      <Row className="align-items-center" fluid = "true">
-        <Col> </Col>
-        <Col xs = {12} className="lobby-title">Lost & Found</Col>
-        <Col></Col>
-      </Row>
-      <Row className="LobbyPage-content" fluid = "true">
-        <Col></Col>
-        <Col xs = {6} className="Host-Container u-flex-alignCenter">
-          <button
-            className="Host-Button"
-            onClick={() => {
-              post("/api/createLobby", { userid: props.userId });
-            }}
-          >
-            <Link to="/waitingroom" className="Host-Button">
-              Host
-            </Link>
-          </button>
+      <Container className="vh-100 main-container" fluid="true">
+        <Row className="align-items-center" fluid="true">
+          <Col> </Col>
+          <Col xs={12} className="lobby-title">
+            Lost & Found
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row className="LobbyPage-content" fluid="true">
+          <Col></Col>
+          <Col xs={6} className="Host-Container u-flex-alignCenter">
+            <button
+              className="Host-Button"
+              onClick={() => {
+                post("/api/createLobby", { userid: props.userId });
+              }}
+            >
+              <Link to="/waitingroom" className="Host-Button">
+                Host
+              </Link>
+            </button>
 
-          <button
-            className="Join-Button"
-            onClick={() => {
-              setShowModal(!showModal);
-            }}
-          >
-            Join
-          </button>
-          {showModal ? EnterKeyModal : UsernameModal}
-          <button
-            onClick={() => {
-              post("/api/resetGamesPlayed");
-            }}
-          >
-            Reset Stats
-          </button>
-        </Col>
-        <Col></Col>
-      </Row>
+            <button
+              className="Join-Button"
+              onClick={() => {
+                setShowModal(!showModal);
+              }}
+            >
+              Join
+            </button>
+            {showModal ? EnterKeyModal : UsernameModal}
+          </Col>
+          <Col></Col>
+        </Row>
       </Container>
     </>
   );

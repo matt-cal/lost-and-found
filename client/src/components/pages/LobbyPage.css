@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap");
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -19,7 +19,7 @@
   color: white;
   filter: drop-shadow(2px 4px 2px #4e5e80);
   text-decoration: none;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .LobbyPage-quit {
@@ -42,14 +42,14 @@
   line-height: 70px;
   font-weight: 700;
   font-size: 2.5vw;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   background-color: #2c2e41;
   border-radius: 40px;
   filter: drop-shadow(2px 4px 2px #4e5e80);
   display: inline-block;
 }
 
-.Host-Button :hover{
+.Host-Button :hover {
   color: white;
 }
 
@@ -61,15 +61,15 @@
   text-align: center;
   font-weight: 700;
   font-size: 2.5vw;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   background-color: #2c2e41;
   border-radius: 40px;
   filter: drop-shadow(2px 4px 2px #4e5e80);
   display: inline-block;
 }
 
-.Join-Button:hover{
-  color:white;
+.Join-Button:hover {
+  color: white;
 }
 
 .Host-Container {
@@ -94,7 +94,7 @@
   color: var(--offWhite);
 }
 
-.LobbyPage-name{
+.LobbyPage-name {
   color: #ecf407;
 }
 
@@ -104,14 +104,14 @@
   text-align: center;
   justify-content: center;
   align-self: center;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-weight: 500;
   font-weight: bold;
   filter: drop-shadow(2px 4px 2px #4e5e80);
 }
 
-.LobbyPage-username-input{
-  color:#2c2e41
+.LobbyPage-username-input {
+  color: #2c2e41;
 }
 
 .LobbyPage-username-button {
@@ -124,11 +124,11 @@
   border-radius: 10px;
   align-items: center;
   line-height: 20px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-weight: bold;
 }
 
-.LobbyPage-change-username-button{
+.LobbyPage-change-username-button {
   height: 32px;
   font-size: 24px;
   width: 240px;
@@ -138,11 +138,11 @@
   border-radius: 10px;
   align-items: center;
   line-height: 20px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-weight: bold;
 }
 
-.LobbyPage-change-username-button:hover{
+.LobbyPage-change-username-button:hover {
   color: rgb(98, 52, 6);
   box-shadow: 0 5px 15px #4e5e80;
 }
@@ -157,9 +157,13 @@
   font-size: 24px;
   width: 240px;
   text-align: center;
+  text-justify: center;
   background-color: var(--offWhite);
-  color: var(--darkBrown);
+  color: #2c2e41;
   border-radius: 10px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  line-height: 20px;
 }
 
 .LobbyPage-key-back {
@@ -169,6 +173,7 @@
   width: 60px;
   text-align: center;
   background-color: var(--offWhite);
-  color: var(--darkBrown);
+  color: #2c2e41;
   border-radius: 5px;
+  font-family: "Times New Roman", Times, serif;
 }
