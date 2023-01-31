@@ -3,9 +3,14 @@ import React, { useState, useEffect } from "react";
 import { get, post } from "../../utilities.js";
 import "../../utilities.css";
 import "./LobbyPage.css";
+import NotLoggedInPage from "./NotLoggedInPage";
 import { socket } from "../../client-socket.js";
 
 const LobbyPage = (props) => {
+  if (props.userId === undefined) {
+    return <NotLoggedInPage />;
+  }
+
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [inputedKey, setInputedKey] = useState("");

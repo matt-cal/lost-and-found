@@ -148,6 +148,7 @@ A98467
 .gameOverPopUp .col {
   background-color: #2c2e41;
   justify-content: center;
+  display:flex;
   border: white 3px solid;
 }
 
@@ -160,7 +161,6 @@ A98467
 .gameOverPopUp .row1 .col h2 {
   font-size: 32pt;
   font-style: italic;
-  border-bottom: black solid 3px;
   
 }
 
