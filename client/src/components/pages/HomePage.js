@@ -22,7 +22,7 @@ const HomePage = ({ userId, handleLogin, handleLogout }) => {
             {userId ? (
               <div className="HomePage-logout-container">
                 <Row className="align-items-center HomePage-playButton">
-                  <Link to="/lobby/" className="HomePage-playButton">
+                  <Link to="/lobby/" className="HomePage-playButton" style = {{textDecoration: "none", color: "white"}}>
                     Play
                   </Link>
                 </Row>
