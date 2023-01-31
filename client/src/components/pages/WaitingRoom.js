@@ -250,7 +250,7 @@ const WaitingRoom = (props) => {
           <Col xs={5} className="u-textCenter"></Col>
           <Col className="u-textCenter player-text">
             <div className="body-container">Name: {player2.name}</div>
-            <div className="body-container">{player2GamesPlayed}</div>
+            <div className="body-container">Games Played: {player2GamesPlayed}</div>
           </Col>
         </Row>
         <Row className="align-items-center row-container">
