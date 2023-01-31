@@ -117,6 +117,11 @@ const markerCoordinates = [
       { lat: -6.1755204, lng: 106.8220584 },
     ],
   },
+  {
+    label: "Toronto",
+    position: { lat: 43.6951476948252, lng: -79.45259465757317 },
+    startPositions: [{ lat: 43.6951476948252, lng: -79.45259465757317 }],
+  },
 ];
 
 // PROPS

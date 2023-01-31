@@ -120,24 +120,14 @@ const LobbyPage = (props) => {
           >
             Join
           </button>
-          {showModal ? EnterKeyModal : <span></span>}
-          <div className="LobbyPage-username-container">
-            <div className="LobbyPage-username-display">
-              Username:
-              <div>{username}</div>
-            </div>
-            <input
-              type="text"
-              placeholder="New Username"
-              className="LobbyPage-username-input"
-              name="message"
-              onChange={handleChange}
-              value={message}
-            />
-            <button className="LobbyPage-username-button" onClick={changeUsername}>
-              Change Username
-            </button>
-          </div>
+          {showModal ? EnterKeyModal : UsernameModal}
+          <button
+            onClick={() => {
+              post("/api/resetGamesPlayed");
+            }}
+          >
+            Reset Stats
+          </button>
         </div>
       </div>
     </>

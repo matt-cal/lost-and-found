@@ -10,6 +10,8 @@ import Col from "react-bootstrap/Col";
 
 const WaitingRoom = (props) => {
   const [player1, setPlayer1] = useState({ name: "" });
+  const [player1GamesPlayed, setPlayer1GamesPlayed] = useState("");
+  const [player2GamesPlayed, setPlayer2GamesPlayed] = useState("");
   const [player2, setPlayer2] = useState({ name: "" });
   const [gameKey, setGameKey] = useState({ key: "XXXXXX" });
   const [isHost, setIsHost] = useState("DefaultValue");
@@ -59,6 +61,13 @@ const WaitingRoom = (props) => {
           setPlayer2({ name: data.username });
         }
       });
+      get("/api/getGamesPlayed").then((data) => {
+        if (isHost) {
+          setPlayer1GamesPlayed(data.gamesPlayed);
+        } else {
+          setPlayer2GamesPlayed(data.gamesPlayed);
+        }
+      });
     }
   }, [isHost, isPlayer2Here]);
 
@@ -74,6 +83,17 @@ const WaitingRoom = (props) => {
           setPlayer1({ name: data.userName });
         }
       });
+      if (isPlayer2Here) {
+        post("/api/getOtherPlayerName", gameKey).then((data) => {
+          get("/api/getOtherPlayerGamesPlayed", data).then((res) => {
+            if (isHost) {
+              setPlayer2GamesPlayed(res.gamesPlayed);
+            } else {
+              setPlayer1GamesPlayed(res.gamesPlayed);
+            }
+          });
+        });
+      }
     }
   }, [isHost, isPlayer2Here]);
 
@@ -135,6 +155,8 @@ const WaitingRoom = (props) => {
   };
 
   const startGame = () => {
+    // increase games played for both players
+    post("/api/updateGamesPlayed", gameKey);
     get("/api/getTimer", gameKey).then((time) => {
       setTimer(time);
     });
@@ -223,17 +245,17 @@ const WaitingRoom = (props) => {
         <Row className="player-padding">
           <Col className="u-textCenter player-text">
             <div className="body-container"> Name: {player1.name}</div>
-            <div className="body-container">Statistics</div>
+            <div className="body-container">Games Played: {player1GamesPlayed}</div>
           </Col>
           <Col xs={5} className="u-textCenter"></Col>
           <Col className="u-textCenter player-text">
             <div className="body-container">Name: {player2.name}</div>
-            <div className="body-container">Statistics</div>
+            <div className="body-container">{player2GamesPlayed}</div>
           </Col>
         </Row>
-        <Row className="align-items-center description-container">
+        <Row className="align-items-center row-container">
           <Col></Col>
-          <Col xs={5}>
+          <Col xs={5} className="start-container">
             {isPlayer2Here
               ? isHost
                 ? htmlActiveStartButton // If Player2 is here and you are Host
@@ -243,7 +265,7 @@ const WaitingRoom = (props) => {
           <Col></Col>
         </Row>
 
-        <Row className="description-padding">
+        <Row className="align-items-center row-container">
           <Col> </Col>
           <Col xs={5} className="align-items-center description-container">
             Challenge your knowledge of a city and see if you can find each other!
