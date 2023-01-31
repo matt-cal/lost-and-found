@@ -30,9 +30,8 @@
   color: var(--offWhite);
   background-color: #2c2e41;
   filter: drop-shadow(8px 8px 4px #4e5e80);
-  border-radius: 40px;
+  border-radius: 50px;
   border: solid 1px rgb(136, 136, 136);
-  /* position: absolute; */
   bottom: 350px;
   display: flex;
   flex-direction: column;

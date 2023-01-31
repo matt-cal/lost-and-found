@@ -231,10 +231,16 @@ const WaitingRoom = (props) => {
   );
 
   const htmlHostLeftScreen = (
-    <div id="Host-Left-Screen">
-      <h1> The Host has Left the Game </h1>
-      <Link to="/lobby"> Leave Game </Link>
-    </div>
+    <Container className="vh-100 Host-Left" fluid = "true">
+      <Row className="align-items-center host-left-text"> The Host has Left the Game </Row>
+      <Row className="align-items-center for-links">
+        <Col></Col>
+        <Col xs = {3} className="leave-game align-items-center" > 
+        <Link to="/lobby" style = {{textDecoration: "none", color: "white"}}> Leave Game </Link>
+        </Col>
+        <Col></Col>
+      </Row>
+    </Container>
   );
 
   return !didHostLeave ? (
@@ -285,7 +291,7 @@ const WaitingRoom = (props) => {
           </Col>
           <Col xs={5} className="u-textCenter"></Col>
           <Col className="u-textCenter">
-            <div className="player-text">Player 2</div>
+            <div className="player-text-2">Player 2</div>
           </Col>
         </Row>
 
