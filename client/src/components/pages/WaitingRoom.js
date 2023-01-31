@@ -170,8 +170,8 @@ const WaitingRoom = (props) => {
 
   return !didHostLeave ? (
     !hasGameStarted ? (
-      <Container className="vh-100 WaitingRoom-container" fluid={"true"}>
-        <Row className="align-items-center top-padding" fluid={"true"}>
+      <Container className="vh-100 WaitingRoom-container" fluid="true">
+        <Row className="align-items-center top-padding" fluid="true">
           <Col className="u-textCenter">
             <button className="buttons" onClick={handleLeaveLobby}>
               Quit...
@@ -210,7 +210,7 @@ const WaitingRoom = (props) => {
           </Col>
         </Row>
 
-        <Row className="player-padding" fluid={true}>
+        <Row className="player-padding" fluid="true">
           <Col className="u-textCenter align-items-center">
             <div className="player-text"> Player 1 </div>
           </Col>
@@ -246,7 +246,6 @@ const WaitingRoom = (props) => {
         <Row className="description-padding">
           <Col> </Col>
           <Col xs={5} className="align-items-center description-container">
-            {" "}
             Challenge your knowledge of a city and see if you can find each other!
           </Col>
           <Col></Col>

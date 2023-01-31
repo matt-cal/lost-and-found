@@ -6,6 +6,7 @@ const User = require("./models/user");
 const allLobbies = {};
 const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOBBYKEYLENGTH = 6;
+const MAXDISTNEEDEDTOWIN = 0.05;
 
 const generateLobbyKey = () => {
   let result = "";
@@ -140,7 +141,6 @@ const startGame = (user, key) => {
   return player2Id;
 };
 /*------------------ End of Lobby System-------------------  */
-const MAXDISTNEEDEDTOWIN = 0.5;
 const resetPlayerPosition = (id, key) => {
   let otherPlayerId;
   const lobby = allLobbies[key];

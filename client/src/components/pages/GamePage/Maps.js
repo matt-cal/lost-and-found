@@ -4,7 +4,7 @@ import { post, get } from "../../../utilities";
 import CountDownTimer from "../../modules/Timer";
 import "./Maps.css";
 import { socket } from "../../../client-socket.js";
-import { Link } from "@reach/router";
+import { Link, useNavigate } from "@reach/router";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -55,6 +55,68 @@ const markerCoordinates = [
       { lat: 34.101758695296375, lng: -118.34026733124281 }, // HollyWood Boulevard
     ],
   },
+  {
+    label: "GuatemalaCity",
+    position: { lat: 14.61461978239971, lng: -90.53378068194324 },
+    startPositions: [
+      { lat: 14.642418896404019, lng: -90.5130841824076 }, //Palacio Nacional de La Cultura
+      { lat: 14.613810161211918, lng: -90.53399521799501 },
+      { lat: 14.6282383999269, lng: -90.5604463468252 },
+    ],
+  },
+  {
+    label: "BuenosAires",
+    position: { lat: -34.606719530404426, lng: -58.44802698731579 },
+    startPositions: [
+      { lat: -34.607845138872555, lng: -58.37373686458325 },
+      { lat: -34.582695584841794, lng: -58.392013844453395 },
+      { lat: -34.588017496719445, lng: -58.45154997513493 },
+      { lat: -34.62357660489178, lng: -58.40718348862815 },
+    ],
+  },
+  {
+    label: "Moscow",
+    position: { lat: 55.755750649783664, lng: 37.61759254686577 },
+    startPositions: [
+      // { lat: 55.74442675430616, lng: 37.61877267310163 },
+      { lat: 55.7554145, lng: 37.6212819 },
+      { lat: 55.7612488, lng: 37.5744103 },
+      { lat: 55.7268238, lng: 37.6223713 },
+      { lat: 55.7674543, lng: 37.8302904 },
+    ],
+  },
+  {
+    label: "CapeTown",
+    position: { lat: -33.93003486559483, lng: 18.550283676293898 },
+    startPositions: [
+      { lat: -33.9060081, lng: 18.4195747 },
+      { lat: -33.893167, lng: 18.5041745 },
+      { lat: -34.0341305, lng: 18.3564229 },
+      { lat: -33.9495236, lng: 18.5088059 },
+    ],
+  },
+  {
+    label: "Mumbai",
+    position: { lat: 19.073938775479657, lng: 72.8713227913605 },
+    startPositions: [
+      { lat: 19.0768763, lng: 72.8361846 },
+      { lat: 19.0198362, lng: 72.8322088 },
+      { lat: 19.0370261, lng: 72.8419262 },
+    ],
+  },
+  {
+    label: "Jakarta",
+    position: { lat: -6.226315061232996, lng: 106.84873253689871 },
+    startPositions: [
+      { lat: -6.174204, lng: 106.830355 },
+      { lat: -6.1758002, lng: 106.7708719 },
+      { lat: -6.2048304, lng: 106.8858548 },
+      { lat: -6.2011877, lng: 106.8136785 },
+      { lat: -6.1863864, lng: 106.89514 },
+      { lat: -6.3007439, lng: 106.8976264 },
+      { lat: -6.1755204, lng: 106.8220584 },
+    ],
+  },
 ];
 
 // PROPS
@@ -82,6 +144,7 @@ function Maps(props) {
   // Gets Random Start Position //
   const [spawnPlayer2, setSpawnPlayer2] = useState(false);
   const [player2Start, setPlayer2Start] = useState(null);
+  const navigate = useNavigate();
 
   // GETS WIN CONDITION //
   useEffect(() => {
@@ -132,6 +195,7 @@ function Maps(props) {
     } else {
       post("/api/deletePlayer2", props.gameKey);
     }
+    navigate("/lobby");
   };
 
   // Ensures Game is Rest if Chosen to Play Agiain //
@@ -247,6 +311,8 @@ function Maps(props) {
                   const startLocations = getStartPositions(location);
                   const startLocation1 = startLocations[0];
                   const startLocation2 = startLocations[1];
+                  console.log("startLocation1", startLocation1);
+                  console.log("startLocation2", startLocation2);
                   post("/api/spawn", {
                     startLocation1: startLocation1,
                     startLocation2: startLocation2,
@@ -322,11 +388,7 @@ function Maps(props) {
           </Row>
           <Row className="row2">
             <Col className="col">
-              <button onClick={handleLeaveLobby}>
-                <Link to="/lobby" style={{ textDecoration: "none", color: "white" }}>
-                  Quit Lobby
-                </Link>
-              </button>
+              <button onClick={handleLeaveLobby}>Quit Lobby</button>
             </Col>
           </Row>
           <Row className="row3">
