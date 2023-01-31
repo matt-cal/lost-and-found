@@ -114,11 +114,16 @@ const deletePlayer2 = (user, key) => {
 };
 const isValidKey = (key) => {
   for (const lobbyKey in allLobbies) {
+    console.log("THIS IS LOBBY KEY", lobbyKey);
     if (lobbyKey === key) {
-      return true;
+      const lobby = allLobbies[lobbyKey];
+      console.log("THIS IS THE LOBBY", lobby);
+      if (Object.keys(lobby.players).length < 2) {
+        return "VALID";
+      } else return "FULL";
     }
   }
-  return false;
+  return "NOTVALID";
 };
 const startGame = (user, key) => {
   let player2Id;

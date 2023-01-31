@@ -106,7 +106,7 @@ const startRunningGame = (key, user1Id, user2Id) => {
     const gameUpdate = [hasWon, distanceFromEachOther];
     player1Socket.emit("gameUpdate", gameUpdate);
     player2Socket.emit("gameUpdate", gameUpdate);
-  }, 1000 / 20); // 60 frames per second
+  }, 1000 / 5); // 60 frames per second
   lobbyToGameIntervalId[key] = intervalId;
 };
 const resetToWaitingRoom = (user, key) => {

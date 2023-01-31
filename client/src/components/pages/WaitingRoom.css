@@ -10,6 +10,7 @@
   height: 100%;
   width: 100%;
   background-repeat: no-repeat;
+  position: relative;
 }
 
 .left-Bar {
@@ -31,7 +32,7 @@
 }
 
 .player-text {
-  font-size: 40px;
+  font-size: 3vw;
   font-weight: bold;
   font-style: italic;
   color:white;
@@ -41,36 +42,52 @@
 
 
 .body-container {
-  font-size: 30px;
+  font-size: 2.5vw;
   color: white;
   font-family: 'Times New Roman', Times, serif;
 }
 
 .start-text {
   font-weight: bold;
-  font-size: 40px;
+  font-size: 3vw;
   text-align: center;
   color: white;
   font-style: italic;
   filter: drop-shadow(2px 4px 2px #4e5e80);
   text-decoration: none;
 }
+.start-text-disabled {
+  font-size: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.763);
+  font-style: italic;
+}
+
 
 .start-button {
   background-color:rgb(44, 46, 65);
-  width: 220px;
-  height: 70px;
+  width: 21vw;
+  height: 6vw;
   filter: drop-shadow(4px 8px 4px #b1b1b1);
   text-decoration: none;
 }
-.start-button :disabled {
-  opacity: 0.3;
+
+
+.start-button-disabled {
+  background-color:rgb(44, 46, 65);
+  width: 220px;
+  height: 70px;
 }
+.start-button-disabled :disabled {
+  opacity: .8;
+}
+
+
 
 .gamepin-container{
   text-align: center;
   align-items: center;
-  font-size: 35px;
+  font-size: 2.5vw;
   font-family:'Times New Roman', Times, serif;
   font-weight: bolder;
   height: 50px;
@@ -88,14 +105,14 @@
 }
 
 .buttons{
-  height: 40px;
-  width: 120px;
+  height: 3.5vw;
+  width: 11.5vw;
   margin: 5px;
   color: var(--offWhite);
   text-decoration: none;
   text-align: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 1.5vw;
   font-family:'Times New Roman', Times, serif;
   background-color: #2c2e41;
   border-radius: 20px;
@@ -105,17 +122,38 @@
 .description-container{
   text-align: center;
   align-items: center;
-  font-size: 35px;
+  font-size: 2.5vw;
   font-weight: bolder;
   font-family:'Times New Roman', Times, serif;
   height: 100px;
   filter: drop-shadow(2px 4px 2px #4e5e80);
   text-decoration: none;
   color: white;
+  position: absolute;
+  bottom: 60px;
 }
 
 .description-padding{
   padding-top: 240px;
+}
+
+.row-container{
+  display: flex;
+  justify-content: center;
+}
+
+.start-container{
+  text-align: center;
+  align-items: center;
+  font-size: 2.5vw;
+  font-weight: bolder;
+  font-family:'Times New Roman', Times, serif;
+  height: 100px;
+  filter: drop-shadow(2px 4px 2px #4e5e80);
+  text-decoration: none;
+  color: white;
+  position: absolute;
+  bottom: 37vh;
 }
 
 

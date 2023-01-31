@@ -10,8 +10,8 @@ import Col from "react-bootstrap/Col";
 
 const WaitingRoom = (props) => {
   const [player1, setPlayer1] = useState({ name: "" });
-  const [player1GamesPlayed, setPlayer1GamesPlayed] = useState(0);
-  const [player2GamesPlayed, setPlayer2GamesPlayed] = useState(0);
+  const [player1GamesPlayed, setPlayer1GamesPlayed] = useState("");
+  const [player2GamesPlayed, setPlayer2GamesPlayed] = useState("");
   const [player2, setPlayer2] = useState({ name: "" });
   const [gameKey, setGameKey] = useState({ key: "XXXXXX" });
   const [isHost, setIsHost] = useState("DefaultValue");
@@ -19,6 +19,7 @@ const WaitingRoom = (props) => {
   const [isPlayer2Here, setIsPlayer2Here] = useState(false);
   const [hasGameStarted, setHasGameStarted] = useState(false);
   const [timer, setTimer] = useState({ hours: 0, minutes: 0, seconds: 30 });
+  const navigate = useNavigate();
 
   // Gets Lobby Key //
   useEffect(() => {
@@ -150,6 +151,7 @@ const WaitingRoom = (props) => {
     } else {
       post("/api/deletePlayer2", gameKey);
     }
+    navigate("/lobby");
   };
 
   const startGame = () => {
@@ -165,48 +167,6 @@ const WaitingRoom = (props) => {
   /****************** <HTML/>  ********************/
   const htmlDisplayNothing = <span> </span>;
 
-  const htmlLeftBar = (
-    <Col>
-      <button onClick={handleLeaveLobby}>
-        <Link to="/lobby"> Quit... </Link>
-      </button>
-      <div className="player-text">Player 1</div>
-      <div className="body-container">Name: {player1.name}</div>
-      <div className="body-container">Statistics</div>
-    </Col>
-  );
-
-  const htmlRightBar = (
-    <Col className="u-textCenter">
-      <div id="timeControlContainer">
-        <button
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 0, seconds: 30 });
-          }}
-        >
-          30 seconds
-        </button>
-        <button
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 2, seconds: 0 });
-          }}
-        >
-          2 minutes
-        </button>
-        <button
-          onClick={() => {
-            post("/api/setTimer", { key: gameKey.key, hours: 0, minutes: 5, seconds: 0 });
-          }}
-        >
-          5 minutes
-        </button>
-      </div>
-      <div className="player-text">Player 2</div>
-      <div className="body-container">Name: {player2.name}</div>
-      <div className="body-container">Statistics</div>
-    </Col>
-  );
-
   const htmlActiveStartButton = (
     <span>
       <button className="start-button" onClick={startGame}>
@@ -217,8 +177,8 @@ const WaitingRoom = (props) => {
 
   const htmleDisbaledStartActive = (
     <span>
-      <button className="start-button" disabled>
-        <div className="start-text">Start</div>
+      <button className="start-button-disabled" disabled>
+        <div className="start-text-disabled">Start</div>
       </button>
     </span>
   );
@@ -232,18 +192,14 @@ const WaitingRoom = (props) => {
 
   return !didHostLeave ? (
     !hasGameStarted ? (
-      <Container className="vh-100 WaitingRoom-container" fluid={true}>
-        <Row className="align-items-center top-padding">
+      <Container className="vh-100 WaitingRoom-container" fluid={"'true'"}>
+        <Row className="align-items-center top-padding" fluid={"'true'"}>
           <Col className="u-textCenter">
             <button className="buttons" onClick={handleLeaveLobby}>
-              <Link style={{ textDecoration: "none", color: "white" }} to="/lobby">
-                {" "}
-                Quit...{" "}
-              </Link>
+              Quit...
             </button>
           </Col>
           <Col xs={5} className="u-textCenter gamepin-container">
-            {" "}
             Game Pin: {gameKey.key}
           </Col>
           <Col className="u-textCenter">
@@ -276,7 +232,7 @@ const WaitingRoom = (props) => {
           </Col>
         </Row>
 
-        <Row className="player-padding">
+        {/* <Row className="player-padding">
           <Col className="u-textCenter align-items-center">
             <div className="player-text"> Player 1 </div>
           </Col>
@@ -307,9 +263,42 @@ const WaitingRoom = (props) => {
               : htmlDisplayNothing}
           </Col>
           <Col></Col>
+        </Row> */}
+
+        <Row className="player-padding" fluid={true}>
+          <Col className="u-textCenter align-items-center">
+            <div className="player-text"> Player 1 </div>
+          </Col>
+          <Col xs={5} className="u-textCenter"></Col>
+          <Col className="u-textCenter">
+            <div className="player-text">Player 2</div>
+          </Col>
         </Row>
 
-        <Row className="description-padding">
+        <Row className="player-padding">
+          <Col className="u-textCenter player-text">
+            <div className="body-container"> Name: {player1.name}</div>
+            <div className="body-container">Games Played: {player1GamesPlayed}</div>
+          </Col>
+          <Col xs={5} className="u-textCenter"></Col>
+          <Col className="u-textCenter player-text">
+            <div className="body-container">Name: {player2.name}</div>
+            <div className="body-container">{player2GamesPlayed}</div>
+          </Col>
+        </Row>
+        <Row className="align-items-center row-container">
+          <Col></Col>
+          <Col xs={5} className="start-container">
+            {isPlayer2Here
+              ? isHost
+                ? htmlActiveStartButton // If Player2 is here and you are Host
+                : htmleDisbaledStartActive // If player2 is Here but you are not host
+              : htmlDisplayNothing}
+          </Col>
+          <Col></Col>
+        </Row>
+
+        <Row className="align-items-center row-container">
           <Col> </Col>
           <Col xs={5} className="align-items-center description-container">
             {" "}

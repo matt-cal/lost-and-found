@@ -157,7 +157,7 @@ router.post("/deletePlayer2", (req, res) => {
 
 router.post("/isValidKey", (req, res) => {
   if (req.user) {
-    res.send(socketManager.isValidKey(req.body.key));
+    res.send({ res: socketManager.isValidKey(req.body.key) });
   }
 });
 router.post("/startGame", (req, res) => {
