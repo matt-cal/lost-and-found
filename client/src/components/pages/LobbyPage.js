@@ -108,9 +108,19 @@ const LobbyPage = (props) => {
     <>
       <Container className="vh-100 main-container" fluid="true">
         <Row className="align-items-center" fluid="true">
-          <Col> </Col>
-          <Col xs={12} className="lobby-title">
-            Lost & Found
+          <Col></Col>
+          <Col xs={12}>
+            <div className="lobby-title-container">
+              <div className="lobby-title">Lost & Found</div>
+              <button
+                className="LobbyPage-quit"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                Quit
+              </button>
+            </div>
           </Col>
           <Col></Col>
         </Row>
