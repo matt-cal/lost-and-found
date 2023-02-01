@@ -39,7 +39,6 @@ router.get("/whoami", (req, res) => {
   res.send(req.user);
 });
 router.get("/getGoogleMapsApiKey", (req, res) => {
-  console.log("process.env.GOOGLE_API_KEY", process.env.GOOGLE_API_KEY);
   res.send({ key: process.env.GOOGLE_API_KEY });
 });
 
@@ -51,9 +50,12 @@ router.post("/initsocket", (req, res) => {
 });
 
 router.get("/user", (req, res) => {
-  User.findById(req.query.userid).then((user) => {
-    res.send(user);
-  });
+  if (req.user) {
+    User.findById(req.query.userid).then((user) => {
+      res.send(user);
+    });
+  }
+  res.send({});
 });
 
 // --------Game State Stuff-------------
@@ -109,6 +111,8 @@ router.post("/calculateDistance", (req, res) => {
   if (req.user) {
     let dist = gameLogic.calcDistance(req.body.location1, req.body.location2);
     res.send({ distance: dist });
+  } else {
+    res.send({});
   }
 });
 
@@ -179,45 +183,63 @@ router.get("/activeUsers", (req, res) => {
 
 /*----------------------- UserName System---------------------------------*/
 router.get("/getUsername", (req, res) => {
-  User.findOne({ name: req.user.name }).then((user) => {
-    res.send({ username: user.username });
-  });
+  if (req.user) {
+    User.findOne({ name: req.user.name }).then((user) => {
+      res.send({ username: user.username });
+    });
+  } else {
+    res.send({});
+  }
 });
 
 router.post("/changeUsername", (req, res) => {
-  User.findOne({ name: req.user.name }).then((user) => {
-    user.username = req.body.username;
-    user.save();
-    socketManager.getSocketFromUserID(req.user._id).emit("username", user.username);
-  });
-  res.send({ message: "updated username" });
+  if (req.user) {
+    User.findOne({ name: req.user.name }).then((user) => {
+      user.username = req.body.username;
+      user.save();
+      socketManager.getSocketFromUserID(req.user._id).emit("username", user.username);
+    });
+    res.send({ message: "updated username" });
+  }
 });
 /*----------------------- End of UserName System---------------------------------*/
 
 // player statistics
 router.post("/updateGamesPlayed", (req, res) => {
-  gameLogic.updateGamesPlayed(req.body.key);
+  if (req.user) {
+    gameLogic.updateGamesPlayed(req.body.key);
+  }
 });
 
 router.get("/getGamesPlayed", (req, res) => {
-  User.findOne({ googleid: req.user.googleid }).then((user) => {
-    res.send({ gamesPlayed: user.gamesPlayed });
-  });
+  if (req.user) {
+    User.findOne({ googleid: req.user.googleid }).then((user) => {
+      res.send({ gamesPlayed: user.gamesPlayed });
+    });
+  } else {
+    res.send({});
+  }
 });
 
 router.get("/getOtherPlayerGamesPlayed", (req, res) => {
-  const username = req.query.userName;
-  User.findOne({ username: username }).then((user) => {
-    console.log("found other user: ", user);
-    res.send({ gamesPlayed: user.gamesPlayed });
-  });
+  if (req.user) {
+    const username = req.query.userName;
+    User.findOne({ username: username }).then((user) => {
+      console.log("found other user: ", user);
+      res.send({ gamesPlayed: user.gamesPlayed });
+    });
+  } else {
+    res.send({});
+  }
 });
 
 router.post("/resetGamesPlayed", (req, res) => {
-  User.findOne({ googleid: req.user.googleid }).then((user) => {
-    user.gamesPlayed = 0;
-    user.save();
-  });
+  if (req.user) {
+    User.findOne({ googleid: req.user.googleid }).then((user) => {
+      user.gamesPlayed = 0;
+      user.save();
+    });
+  }
 });
 
 // anything else falls to this "not found" case
