@@ -24,7 +24,7 @@ const createLobby = (user, lobbyKey) => {
     lobbyKey: lobbyKey,
     players: {},
     gameInfo: {
-      startTime: { hours: 0, minutes: 10, seconds: 0 },
+      startTime: { hours: 0, minutes: 5, seconds: 0 },
       hotAndCold: false,
     },
     gameState: {

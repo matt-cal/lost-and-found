@@ -36,6 +36,10 @@ router.get("/whoami", (req, res) => {
 
   res.send(req.user);
 });
+router.get("/getGoogleMapsApiKey", (req, res) => {
+  console.log("process.env.GOOGLE_API_KEY", process.env.GOOGLE_API_KEY);
+  res.send({ key: process.env.GOOGLE_API_KEY });
+});
 
 router.post("/initsocket", (req, res) => {
   // do nothing if user not logged in

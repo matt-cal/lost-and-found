@@ -29,15 +29,6 @@ const mapCenter = {
 
 const markerCoordinates = [
   {
-    label: "Boston",
-    position: { lat: 42.345573, lng: -71.098326 },
-    startPositions: [
-      { lat: 42.345573, lng: -71.098326 }, // Fenway area
-      { lat: 42.35650542248174, lng: -71.0620105380493 }, //Boston Commons
-      { lat: 42.360126338885586, lng: -71.05587522572742 }, // Quincy Market
-    ],
-  },
-  {
     label: "NewYorkCity",
     position: { lat: 40.75497751666591, lng: -73.98997420018596 },
     startPositions: [
@@ -59,9 +50,9 @@ const markerCoordinates = [
     label: "GuatemalaCity",
     position: { lat: 14.61461978239971, lng: -90.53378068194324 },
     startPositions: [
-      { lat: 14.642418896404019, lng: -90.5130841824076 }, //Palacio Nacional de La Cultura
-      { lat: 14.613810161211918, lng: -90.53399521799501 },
-      { lat: 14.6282383999269, lng: -90.5604463468252 },
+      { lat: 14.6425101, lng: -90.5137341 }, //Palacio Nacional de La Cultura
+      { lat: 14.6159573, lng: -90.5384 },
+      { lat: 14.6035143, lng: -90.5163084 },
     ],
   },
   {
@@ -81,7 +72,6 @@ const markerCoordinates = [
       // { lat: 55.74442675430616, lng: 37.61877267310163 },
       { lat: 55.7554145, lng: 37.6212819 },
       { lat: 55.7612488, lng: 37.5744103 },
-      { lat: 55.7268238, lng: 37.6223713 },
       { lat: 55.7674543, lng: 37.8302904 },
     ],
   },
@@ -120,12 +110,13 @@ const markerCoordinates = [
   {
     label: "Toronto",
     position: { lat: 43.6951476948252, lng: -79.45259465757317 },
-    startPositions: [{ lat: 43.6951476948252, lng: -79.45259465757317},
-      {lat: 43.64787131934134, lng: -79.3778126287389},
-      {lat: 43.65432199190001, lng: -79.39282320175265},
-      {lat: 43.654833328054785, lng: -79.37998044593088},
-      {lat: 43.66163071838289, lng: -79.37661849990288},
-      {lat: 43.65403964243329, lng: -79.39802480175264},
+    startPositions: [
+      { lat: 43.6951476948252, lng: -79.45259465757317 },
+      { lat: 43.64787131934134, lng: -79.3778126287389 },
+      { lat: 43.65432199190001, lng: -79.39282320175265 },
+      { lat: 43.654833328054785, lng: -79.37998044593088 },
+      { lat: 43.66163071838289, lng: -79.37661849990288 },
+      { lat: 43.65403964243329, lng: -79.39802480175264 },
     ],
   },
   {
@@ -185,11 +176,11 @@ const markerCoordinates = [
   {
     label: "Barcelona",
     position: { lat: 41.38506266151195, lng: 2.1591597879117144 },
-    startPositions: [{ lat: 41.40445186667241, lng: 2.1736754963363945 },
-    {lat: 41.3953390285947, lng: 2.1620211820801343},
-    {lat: 41.38773589606016, lng: 2.175568582080129},
-    {lat: 41.38578482224457, lng: 2.1695638693498447},
-    {lat: 41.38913611995076, lng: 2.1862472287068635},],
+    startPositions: [
+      { lat: 41.38773589606016, lng: 2.175568582080129 },
+      { lat: 41.38578482224457, lng: 2.1695638693498447 },
+      { lat: 41.38913611995076, lng: 2.1862472287068635 },
+    ],
   },
 ];
 
@@ -200,7 +191,7 @@ function Maps(props) {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDMGy9-oVsU4Ei80p5oaAq1SPGFnPlmPjs",
+    googleMapsApiKey: props.googleMapsApiKey,
   });
 
   // GOOGLE MAP OBJECTS //
@@ -341,7 +332,7 @@ function Maps(props) {
           visible={false}
           center={center}
           onUnmount={(panorama) => {
-            console.log("onUnmount", panorama);
+            setPanorama(null);
           }}
           onLoad={(panorama) => {
             panorama.setOptions({
@@ -385,8 +376,6 @@ function Maps(props) {
                   const startLocations = getStartPositions(location);
                   const startLocation1 = startLocations[0];
                   const startLocation2 = startLocations[1];
-                  console.log("startLocation1", startLocation1);
-                  console.log("startLocation2", startLocation2);
                   post("/api/spawn", {
                     startLocation1: startLocation1,
                     startLocation2: startLocation2,

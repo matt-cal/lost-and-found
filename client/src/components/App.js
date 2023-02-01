@@ -5,8 +5,6 @@ import jwt_decode from "jwt-decode";
 import NotFound from "./pages/NotFound.js";
 import HomePage from "./pages/HomePage.js";
 import LobbyPage from "./pages/LobbyPage.js";
-import NavBar from "./modules/NavBar.js";
-import Game from "./pages/GamePage/Game.js";
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
@@ -19,6 +17,7 @@ import WaitingRoom from "./pages/WaitingRoom.js";
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
+  const [googleMapsApiKey, setGoogleMapsApiKey] = useState(undefined);
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -26,6 +25,9 @@ const App = () => {
         // they are registed in the database, and currently logged in.
         setUserId(user._id);
       }
+    });
+    get("/api/getGoogleMapsApiKey").then((data) => {
+      setGoogleMapsApiKey(data.key);
     });
   }, []);
 
@@ -46,18 +48,12 @@ const App = () => {
 
   return (
     <>
-        <Router>
-          <HomePage
-            path="/"
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            userId={userId}
-          />
-          <LobbyPage path="/lobby" userId={userId} />
-          <WaitingRoom path="/waitingroom" userId={userId} />
-          <Game path="/Game" userId={userId}/>
-          <NotFound default />
-        </Router>
+      <Router>
+        <HomePage path="/" handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />
+        <LobbyPage path="/lobby" userId={userId} />
+        <WaitingRoom path="/waitingroom" userId={userId} googleMapsApiKey={googleMapsApiKey} />
+        <NotFound default />
+      </Router>
     </>
   );
 };

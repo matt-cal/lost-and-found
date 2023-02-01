@@ -12,6 +12,7 @@ const Game = (props) => {
       isHost={props.isHost}
       setGameKey={props.setGameKey}
       timer={props.timer}
+      googleMapsApiKey={props.googleMapsApiKey}
     />
   );
 };
