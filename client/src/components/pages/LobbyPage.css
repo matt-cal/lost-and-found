@@ -24,18 +24,22 @@
 }
 
 .LobbyPage-quit {
-  margin-top: 8px;
-  margin-right: 8px;
-  height: 32px;
-  font-size: 24px;
+  height: 2.5vw;
+  font-size: 2vw;
+  font-family: 'Times New Roman', Times, serif;
   width: 100px;
   text-align: center;
-  line-height: 16px;
+  line-height: 1vw;
   background-color: #2c2e41;
   color: white;
   border: rgb(104, 104, 104) solid 1px;
   border-radius: 16px;
   text-decoration: none;
+}
+
+.center-button{
+  display: flex;
+  justify-content: center;
 }
 
 .lobby-title-container {
