@@ -191,7 +191,7 @@ function Maps(props) {
   // API-HANDLER //
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: props.googleMapsApiKey,
+    googleMapsApiKey: "AIzaSyDMGy9-oVsU4Ei80p5oaAq1SPGFnPlmPjs",
   });
 
   // GOOGLE MAP OBJECTS //

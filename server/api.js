@@ -19,6 +19,8 @@ const auth = require("./auth");
 // api endpoints: all these paths will be prefixed with "/api/"
 const router = express.Router();
 
+require("dotenv").config();
+
 //initialize socket
 const socketManager = require("./server-socket");
 const socket = require("socket.io-client/lib/socket");
