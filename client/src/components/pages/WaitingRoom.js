@@ -253,7 +253,7 @@ const WaitingRoom = (props) => {
             </button>
           </Col>
           <Col xs={5} className="u-textCenter gamepin-container">
-            Game Pin: {gameKey.key}
+            Game PIN: {gameKey.key}
           </Col>
           <Col className="u-textCenter">
             <div id="timeControlContainer">

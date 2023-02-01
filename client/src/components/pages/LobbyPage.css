@@ -19,7 +19,8 @@
   color: white;
   filter: drop-shadow(2px 4px 2px #4e5e80);
   text-decoration: none;
-  font-family: "Times New Roman", Times, serif;
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
 }
 
 .LobbyPage-quit {
@@ -157,16 +158,19 @@
 }
 
 .LobbyPage-key-text {
-  font-size: 24px;
+  font-size: 2vw;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .LobbyPage-key-input,
 .LobbyPage-key-submit {
-  height: 32px;
-  font-size: 24px;
-  width: 240px;
+  line-height: 1.6vw;
+  height: 2.5vw;
+  font-size: 2vw;
+  width: 9vw;
   text-align: center;
   text-justify: center;
+  font-family: 'Times New Roman', Times, serif;
   background-color: var(--offWhite);
   color: #2c2e41;
   border-radius: 10px;
@@ -176,13 +180,14 @@
 }
 
 .LobbyPage-key-back {
-  font-size: 12px;
+  line-height: 1vw;
+  font-size: 1vw;
   font-weight: 700;
-  height: 20px;
-  width: 60px;
+  height: 1.5vw;
+  width: 3vw;
   text-align: center;
   background-color: var(--offWhite);
   color: #2c2e41;
   border-radius: 5px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: 'Times New Roman', Times, serif;
 }
