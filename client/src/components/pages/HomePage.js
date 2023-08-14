@@ -8,21 +8,22 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-//TODO: REPLACE WITH YOUR OWN CLIENT_ID
-const GOOGLE_CLIENT_ID = "89445914111-u81dif2k5ba9g2bm0h5rvuotfo7f9tup.apps.googleusercontent.com";
-
-const HomePage = ({ userId, handleLogin, handleLogout }) => {
+const HomePage = ({ userId, handleLogin, handleLogout, googleClientId }) => {
   return (
     <Container className="vh-100 HomePage-container" fluid={true}>
       <Row className="HomePage-title homepage-middle-signin">Lost & Found</Row>
       <Row>
         <Col></Col>
         <Col xs={4} className="align-items-center">
-          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <GoogleOAuthProvider clientId={googleClientId}>
             {userId ? (
               <div className="HomePage-logout-container">
                 <Row className="align-items-center HomePage-playButton">
-                  <Link to="/lobby/" className="HomePage-playButton" style = {{textDecoration: "none", color: "white"}}>
+                  <Link
+                    to="/lobby/"
+                    className="HomePage-playButton"
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
                     Play
                   </Link>
                 </Row>

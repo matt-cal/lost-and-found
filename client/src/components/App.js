@@ -11,13 +11,13 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 import WaitingRoom from "./pages/WaitingRoom.js";
-
 /**
  * Define the "App" component
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
   const [googleMapsApiKey, setGoogleMapsApiKey] = useState(undefined);
+  const [googleClientId, setGoogleClientId] = useState(undefined);
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -26,8 +26,10 @@ const App = () => {
         setUserId(user._id);
       }
     });
-    get("/api/getGoogleMapsApiKey").then((data) => {
+    console.log("getting Google Info");
+    get("/api/getGoogleInfo").then((data) => {
       setGoogleMapsApiKey(data.key);
+      setGoogleClientId(data.id);
     });
   }, []);
 
@@ -49,7 +51,13 @@ const App = () => {
   return (
     <>
       <Router>
-        <HomePage path="/" handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />
+        <HomePage
+          path="/"
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+          userId={userId}
+          googleClientId={googleClientId}
+        />
         <LobbyPage path="/lobby" userId={userId} />
         <WaitingRoom path="/waitingroom" userId={userId} googleMapsApiKey={googleMapsApiKey} />
         <NotFound default />

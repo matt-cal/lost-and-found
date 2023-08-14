@@ -38,8 +38,8 @@ router.get("/whoami", (req, res) => {
 
   res.send(req.user);
 });
-router.get("/getGoogleMapsApiKey", (req, res) => {
-  res.send({ key: process.env.GOOGLE_API_KEY });
+router.get("/getGoogleInfo", (req, res) => {
+  res.send({ key: process.env.GOOGLE_API_KEY, id: process.env.GOOGLE_CLIENT_ID });
 });
 
 router.post("/initsocket", (req, res) => {
